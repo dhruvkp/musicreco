@@ -1,0 +1,5 @@
+test_dataset: /home/vagrant/Music
+training_dataset: /home/vagrant/Music
+
+db:
+  database: databases/simreco.db
