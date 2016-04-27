@@ -1,5 +1,6 @@
 test_dataset: /home/vagrant/Music
-training_dataset: /home/vagrant/Music
+#training_dataset: /home/vagrant/Music
+training_dataset: /Users/puneet/Downloads/genres
 
 db:
   database: databases/simreco.db

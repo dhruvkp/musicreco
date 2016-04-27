@@ -8,7 +8,6 @@ def extract_features(signal, features):
             fvs.append(librosa.feature.zero_crossing_rate(signal)[0, 0])
         elif feature_name == 'spectral_centroid':
             fvs.append(librosa.feature.spectral_centroid(signal)[0, 0])
-        elif fea
     return fvs
 
 def createVector(filename):

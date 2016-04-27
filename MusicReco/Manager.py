@@ -38,6 +38,6 @@ class Manager:
                 file.vector.setdefault(plugin.name, []).append(po.vector)
                 file.state = 1                       # DONE PROCESSING
                 file.save()
-
+                print(file.vector)
         #except Exception, e:
     #        print 'init_vectors manager.py ', e

@@ -18,7 +18,7 @@ class Plugin(object):
         if name == 'module':
             # Lazy load the plugin module
             if 'module' not in self.__dict__:
-                print "magic function ", self.module_name
+                print("magic function ", self.module_name)
                 mod = __import__(self.module_name)
                 components = self.module_name.split('.')
                 for comp in components[1:]:
@@ -51,7 +51,7 @@ class Audio(object):
         self.tag = tag
 
     def __repr__(self):
-        return "<AudioFile('%s')>"%(self.file_name)
+        return "<AudioFile('%s')>"%(self.path)
 
 class Tag(object):
     """ Tag Object and its representations """
