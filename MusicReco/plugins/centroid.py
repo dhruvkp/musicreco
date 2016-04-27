@@ -1,6 +1,6 @@
 from numpy import array
 import librosa
-#import sklearn.preprocessing.MinMaxScaler
+from sklearn.preprocessing import MinMaxScaler
 
 def extract_features(signal, features):
     fvs = list()
