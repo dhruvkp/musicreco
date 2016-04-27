@@ -1,6 +1,6 @@
 from numpy import array
 import librosa
-import sklearn.preprocessing.MinMaxScaler
+from sklearn.preprocessing import MinMaxScaler
 
 def extract_features(signal, features):
     fvs = list()
@@ -16,5 +16,5 @@ def createVector(filename):
     signal, fs = librosa.load(filename)
     features = ('zero_crossing_rate', 'spectral_centroid')
 
-    song_features = numpy.array([extract_features(signal, features)])
+    song_features = array([extract_features(signal, features)])
     return song_features
