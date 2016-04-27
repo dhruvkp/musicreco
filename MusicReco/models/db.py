@@ -2,6 +2,7 @@ from peewee import *
 from playhouse.kv import PickledField
 import MusicReco.models.abstract as abstract
 from config import settings
+import os
 # Config - aside from our database
 
 DATABASE = settings['db']['database']
@@ -45,6 +46,10 @@ class Cluster(BaseModel):
     audio = ForeignKeyField(Audio, related_name ='clusters')
 
 def create_tables():
+    directory = os.path.dirname(DATABASE)
+    if not os.path.exists(directory):
+      os.makedirs(directory)
+
     database.connect()
     try:
         database.create_tables([Plugin, Audio, Cluster, Tag, PluginOutput])
