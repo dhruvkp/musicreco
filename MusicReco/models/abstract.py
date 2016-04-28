@@ -47,7 +47,6 @@ class Audio(object):
 
     def __init__(self, file_name, tag=None):
         self.file_name = file_name
-        self.vector = []
         self.tag = tag
 
     def __repr__(self):
@@ -60,7 +59,7 @@ class Tag(object):
         self.vector = []
 
     def __repr__(self):
-        return "<Tag('%s')>"%(self.name)
+        return "<Tag('%s')>"%(self.genre)
 
 class PluginOutput(object):
     """ Object to represent the output of plugin """

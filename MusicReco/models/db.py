@@ -3,6 +3,7 @@ from playhouse.kv import PickledField
 import MusicReco.models.abstract as abstract
 from config import settings
 import os
+from collections import defaultdict
 # Config - aside from our database
 
 DATABASE = settings['db']['database']
@@ -24,6 +25,10 @@ class Plugin(BaseModel, abstract.Plugin):
                         plugin = self,
                         audio = audio )
 
+    def process(self, file):
+        update_vector(self, file)
+        file.state = 1
+        file.save()
 
 class Tag(BaseModel, abstract.Tag):
     genre = CharField()
@@ -31,15 +36,30 @@ class Tag(BaseModel, abstract.Tag):
 class Audio(BaseModel, abstract.Audio):
     name = CharField()
     path = CharField()
-    vector = PickledField(null=True)
     tag = ForeignKeyField(Tag, related_name = 'audio', null=True)
     state = IntegerField(null=True, default=0)
     # We can extend it further by adding numplayed, star
 
+    def process(self, plugin):
+        update_vector(plugin, self)
+        self.state = 1
+        self.save()
+
+    def plugin_outputs(self):
+        result= {}
+        if self.state == 0:
+            print("Not processed yet..")
+        for pout in self.poutputs:
+            result[pout.plugin.name] = pout.vector
+        return result
+
 class PluginOutput(BaseModel, abstract.PluginOutput):
     plugin = ForeignKeyField(Plugin)
-    audio = ForeignKeyField(Audio)
+    audio = ForeignKeyField(Audio, related_name='poutputs')
     vector = PickledField()
+
+    def __repr__(self):
+        return "<Pluging Output %d %d>: "%(self.plugin.id, self.audio.id),self.vector
 
 class Cluster(BaseModel):
     tag = ForeignKeyField(Tag, related_name = 'clusters')

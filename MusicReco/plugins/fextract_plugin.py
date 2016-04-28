@@ -24,6 +24,8 @@ def createVector(filename):
     # or we take some average
 
     # With guassian, we can approximate difference between two probabilties ( KL divergence, can use variational inference VERY IMPORTANT )
-
-
-    return mfccs
+    
+    # mfccs are 20 X 1283 vectors
+    # get covariance matrix
+    
+    return mfccs.mean(axis=1)

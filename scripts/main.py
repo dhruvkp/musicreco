@@ -19,13 +19,13 @@ def main():
         manager.add_file(path, file, tag)
 
     plugins = [ ('centroid', 'MusicReco.plugins.centroid'),
-                ('fextract', 'MusicReco.plugins.centroid')]
+                ('fextract', 'MusicReco.plugins.fextract_plugin')]
 
     for name, plugin in plugins:
         manager.add_plugin(name, plugin)
 
     # Init vectors
-    manager.init_vectors()
+    manager.init_vectors(plugin='fextract')
 
     # learning algorithms
 

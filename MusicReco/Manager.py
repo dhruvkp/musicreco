@@ -30,14 +30,7 @@ class Manager:
         for plugin in plugins:
             for file in files:
                 print(("PROCESSING ", file.name))
-                po = self.model.update_vector(plugin, file)
+                plugin.process(file)
 
-                if file.vector == None:
-                    file.vector = {}
-
-                file.vector.setdefault(plugin.name, []).append(po.vector)
-                file.state = 1                       # DONE PROCESSING
-                file.save()
-                print(file.vector)
         #except Exception, e:
     #        print 'init_vectors manager.py ', e
