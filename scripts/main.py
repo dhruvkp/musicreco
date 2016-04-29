@@ -29,7 +29,9 @@ def main():
     # learning algorithms
     manager.train()
 
-    manager.test()
+    psamples, nsamples =  manager.test()
+
+    manager.accuracy_score(psamples, nsamples)
 
 if __name__ == '__main__':
     main();

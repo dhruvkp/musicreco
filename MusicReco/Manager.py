@@ -47,7 +47,7 @@ class Manager:
         """ Learning algorithms for audio classification """
         #Todo: Filter not implemented. Filter will make sure only 
         # Selected plugins are passed inside dataframe.
-        files = Audio.select().filter(state=1).filter(istest=0).limit(10)
+        files = Audio.select().filter(state=1).filter(istest=0)
 
         index = []
         rows = [] 
@@ -61,16 +61,14 @@ class Manager:
             rows.append(row)
         
         df = pd.DataFrame(index = index, data=rows)
-        from pdb import set_trace as bp
-        #bp()
+
         self.mllib.train(data= df)
 
     def test(self):
-        self.mllib.test(plugin=self.pluginFilter)
-        
+        return self.mllib.test(plugin=self.pluginFilter)
 
-    def accuracy_score(self):
-        pass
+    def accuracy_score(self, p , n):
+        print("ACCURACY SCORE ", p / (p + n ))
 
     def init_vectors(self, plugin= None, limit = 10):
         """ Apply plugins to music files """
