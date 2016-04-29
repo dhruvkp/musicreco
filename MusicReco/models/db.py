@@ -38,6 +38,8 @@ class Audio(BaseModel, abstract.Audio):
     path = CharField()
     tag = ForeignKeyField(Tag, related_name = 'audio', null=True)
     state = IntegerField(null=True, default=0)
+    guess = CharField(null=True)
+    istest = BooleanField(default=0, null=False)
     # We can extend it further by adding numplayed, star
 
     def process(self, plugin):
@@ -45,13 +47,6 @@ class Audio(BaseModel, abstract.Audio):
         self.state = 1
         self.save()
 
-    def plugin_outputs(self):
-        result= {}
-        if self.state == 0:
-            print("Not processed yet..")
-        for pout in self.poutputs:
-            result[pout.plugin.name] = pout.vector
-        return result
 
 class PluginOutput(BaseModel, abstract.PluginOutput):
     plugin = ForeignKeyField(Plugin)
@@ -102,15 +97,8 @@ def get_audio_files( file_name = None, tag = None):
     return query
 
 def update_vector(plugin , audio):
-    """ Create or replace the current plugin output object for the provided plugin/audio file pair """
-
-    old_output = PluginOutput.select(Plugin, Audio ).join(Plugin, on=(Plugin.id == PluginOutput.plugin_id) ).join(Audio, on=( Audio.id == PluginOutput.audio_id))
-
-    try:
-        old_output.get()
-        old_output.delete_instance()
-    except Exception as e:
-        pass
+    """ Create or replace the current plugin output object for
+         the provided plugin/audio file pair """
 
     PO = plugin.createVector(audio)
     PO.save()

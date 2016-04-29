@@ -52,6 +52,19 @@ class Audio(object):
     def __repr__(self):
         return "<AudioFile('%s')>"%(self.path)
 
+    @property
+    def vector(self):
+        result= {}
+        if self.state == 0:
+            print("Not processed yet..")
+        for pout in self.poutputs:
+            result[pout.plugin.name] = pout.vector
+        return result
+
+    @property
+    def genre(self):
+        return self.tag.genre
+
 class Tag(object):
     """ Tag Object and its representations """
     def __init__(self, name):

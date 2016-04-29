@@ -5,29 +5,31 @@ import MusicReco.models.db
 from utils import load_collection
 
 def main():
-    # load collection
+    # import settings
+    tags = settings['tags']
+    plugins = settings['plugins']
+    train_dir = settings['training_dataset']
+    test_size = float(settings['test_size'])
+
     model = MusicReco.models.db
     manager = Manager(model)
 
     # initialize_storage
     manager.initialize_storage()
-    tags = ['blues' , 'classical' , 'country' , 'disco' , 'hiphop' , 'jazz',	'metal',  'pop',  'reggae' , 'rock']
     
-    files = load_collection(tags)
+    # load collection
+    manager.load_collection(tags, train_dir, test_size)
+    manager.load_plugins(plugins)
 
-    for path, file, tag in files:
-        manager.add_file(path, file, tag)
+    # Create feature vector of songs
 
-    plugins = [ ('centroid', 'MusicReco.plugins.centroid'),
-                ('fextract', 'MusicReco.plugins.fextract_plugin')]
-
-    for name, plugin in plugins:
-        manager.add_plugin(name, plugin)
-
-    # Init vectors
-    manager.init_vectors(plugin='fextract')
+    #manager.init_vectors(plugin='fextract')
+    #manager.init_vectors()
 
     # learning algorithms
+    manager.train()
+
+    manager.test()
 
 if __name__ == '__main__':
     main();

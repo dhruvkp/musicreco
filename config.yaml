@@ -1,6 +1,20 @@
-test_dataset: /home/vagrant/Music
-#training_dataset: /home/vagrant/Music
 training_dataset: /Users/puneet/Downloads/genres
+test_size: 0.33
+tags:
+  - blues
+  - classical
+  - country
+  - disco
+  - hiphop
+  - jazz
+  - metal
+  - pop
+  - reggae
+  - rock
+
+plugins:
+  centroid: MusicReco.plugins.centroid
+  fextract: MusicReco.plugins.fextract_plugin
 
 db:
   database: databases/simreco.db
