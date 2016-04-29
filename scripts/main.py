@@ -15,19 +15,19 @@ def main():
     manager = Manager(model)
 
     # initialize_storage
-    #manager.initialize_storage()
+    manager.initialize_storage()
     
     # load collection
-    #manager.load_collection(tags, train_dir, test_size)
-    #manager.load_plugins(plugins)
+    manager.load_collection(tags, train_dir, test_size)
+    manager.load_plugins(plugins)
 
     # Create feature vector of songs
-    manager.use_plugin(plugin='fextract')
-    manager.init_vectors(limit = 10)
+    manager.use_plugin(plugin='GMM')
+    #manager.init_vectors(limit = 10)
     #manager.init_vectors()
 
     # learning algorithms
-    manager.train()
+    #manager.train()
 
     psamples, nsamples =  manager.test()
 

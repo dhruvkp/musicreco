@@ -54,7 +54,7 @@ class PluginOutput(BaseModel, abstract.PluginOutput):
     vector = PickledField()
 
     def __repr__(self):
-        return "<Pluging Output %d %d>: "%(self.plugin.id, self.audio.id),self.vector
+        return "<Pluging Output %d %d>: "%(self.plugin.id, self.audio.id)
 
 class Cluster(BaseModel):
     tag = ForeignKeyField(Tag, related_name = 'clusters')
@@ -90,7 +90,7 @@ def get_plugins(name = None, module_name = None):
 
 def get_audio_files( limit= 10, **filters):
     query = Audio.select()
-    print(len(filters))
+
     if len(filters):
         query = query.filter(**filters)
 

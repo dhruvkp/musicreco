@@ -46,6 +46,7 @@ class Base:
 		files  = Audio.select().filter(istest=1).limit(limit)
 		for file in files:
 			guess = self.predict(file)
+			print("guess -> ", guess, "Actual -> ", file.genre)
 
 			if guess == file.genre:
 				positive += 1

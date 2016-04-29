@@ -15,6 +15,7 @@ tags:
 plugins:
   centroid: MusicReco.plugins.centroid
   fextract: MusicReco.plugins.fextract_plugin
+  GMM:  MusicReco.plugins.GMM_plugin
 
 db:
   database: databases/simreco.db

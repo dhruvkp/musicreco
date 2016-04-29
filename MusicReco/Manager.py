@@ -2,6 +2,7 @@ from MusicReco.models.db import *
 import pandas as pd
 from MusicReco.mllib.linear import Linear
 from MusicReco.mllib.KMeans import KMeans
+from MusicReco.mllib.KNN import KNN
 from utils import *
 from sklearn.cross_validation import train_test_split
 
@@ -14,7 +15,7 @@ class Manager:
         self.model = model
         self.learner = learner
         #self.mllib = Linear()
-        self.mllib  = KMeans()
+        self.mllib  = KNN()
         self.pluginFilter = None
 
     def use_plugin(self, plugin):
@@ -68,5 +69,4 @@ class Manager:
     def init_vectors(self,limit = 10):
         """ Apply plugins to music files """
         # process all files with state = 0 and no test files
-        print("TRAINING AUDIO", limit)
         self.mllib.process(plugin=self.pluginFilter, limit=limit, state=0, istest=0)
