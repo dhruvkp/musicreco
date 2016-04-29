@@ -68,5 +68,5 @@ class Manager:
     def init_vectors(self,limit = 10):
         """ Apply plugins to music files """
         # process all files with state = 0 and no test files
-        print("TRAINING AUDIO")
+        print("TRAINING AUDIO", limit)
         self.mllib.process(plugin=self.pluginFilter, limit=limit, state=0, istest=0)

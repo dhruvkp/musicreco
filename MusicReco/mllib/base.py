@@ -9,10 +9,7 @@ class Base:
 
 	def process(self, limit=10, plugin = None, **filters):
 
-		files  = self.model.get_audio_files(**filters)
-		#for k,v in filters.items():
-		#	files = files.filter()
-		print("plugin ", plugin)
+		files  = self.model.get_audio_files(limit=limit,**filters)
 		plugins = self.model.get_plugins(name=plugin)
 
 		for file in files:
