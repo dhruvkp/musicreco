@@ -7,7 +7,7 @@ Edit config.yaml for database name and run
 ```
 python -m scripts.main
 ```
-This will run main.py under scripts directory. It will create database and populate them from music files.
+This will run main.py under scripts directory. It will create database and populate them from music files. It will also split up the data files in test_size ratio specified in configuration settings and used it later on for accuracy score.
 
 ### How to write plugins
 Simply add plugin in plugins directory. Plugin should contain atleast
