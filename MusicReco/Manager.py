@@ -1,6 +1,6 @@
 from MusicReco.models.db import *
 import pandas as pd
-from MusicReco.mllib import mllib
+from MusicReco.mllib.linear import Linear
 from utils import *
 from sklearn.cross_validation import train_test_split
 
@@ -12,7 +12,7 @@ class Manager:
     def __init__(self, model, learner=None):
         self.model = model
         self.learner = learner
-        self.mllib = mllib.mllib()
+        self.mllib = Linear()
         self.pluginFilter = None
 
     def add_plugin(self, name, module_name):
@@ -47,20 +47,7 @@ class Manager:
         """ Learning algorithms for audio classification """
         #Todo: Filter not implemented. Filter will make sure only 
         # Selected plugins are passed inside dataframe.
-        files = Audio.select().filter(state=1).filter(istest=0)
-
-        index = []
-        rows = [] 
-        for file in files:
-            #print(file, file.vector, file.genre)
-            row = {'class':file.genre}
-
-            index.append(file.name)
-            row.update(file.vector)
-
-            rows.append(row)
-        
-        df = pd.DataFrame(index = index, data=rows)
+        df = self.mllib.getDataFrame()
 
         self.mllib.train(data= df)
 
@@ -68,18 +55,11 @@ class Manager:
         return self.mllib.test(plugin=self.pluginFilter)
 
     def accuracy_score(self, p , n):
+        """ GET accuracy score """
+        #TODO: Extend it to confusion matrix
         print("ACCURACY SCORE ", p / (p + n ))
 
     def init_vectors(self, plugin= None, limit = 10):
         """ Apply plugins to music files """
-        files  = Audio.select().filter(state=0).filter(istest=0).limit(limit)
-        self.pluginFilter = plugin
-
-        plugins = self.model.get_plugins(name=plugin)
-        for plugin in plugins:
-            for file in files:
-                print(("PROCESSING ", file.name))
-                plugin.process(file)
-
-        #except Exception, e:
-    #        print 'init_vectors manager.py ', e
+        # process all files with state = 0 and no test files
+        self.mllib.process(plugin, limit, state=0, istest=0)

@@ -23,7 +23,7 @@ def main():
 
     # Create feature vector of songs
 
-    #manager.init_vectors(plugin='fextract')
+    manager.init_vectors(plugin='fextract',limit = 100)
     #manager.init_vectors()
 
     # learning algorithms

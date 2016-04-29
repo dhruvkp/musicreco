@@ -27,5 +27,5 @@ def createVector(filename):
     
     # mfccs are 20 X 1283 vectors
     # get covariance matrix
-    
+
     return mfccs.mean(axis=1)

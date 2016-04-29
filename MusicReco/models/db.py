@@ -88,11 +88,13 @@ def get_plugins(name = None, module_name = None):
 
     return query
 
-def get_audio_files( file_name = None, tag = None):
-    query = Audio.select().where(Audio.file_name == file_name)
+def get_audio_files( limit= 10, **filters):
+    query = Audio.select()
+    print(len(filters))
+    if len(filters):
+        query = query.filter(**filters)
 
-    if tag != None:
-        query = query.join(Tag).filter(Tag.genre == tag)
+    query = query.limit(limit)
 
     return query
 
