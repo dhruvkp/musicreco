@@ -1,13 +1,12 @@
-from base import Base
+from .base import Base
 
 class KMeans(Base):
-	def __init__(self):
-		pass
 
 	def train(self, data=None):
 		""" Training through KMeans """
 		pass
 
-	def predict(file):
+	def predict(self,file):
 		""" GUESS the output of single file """
-		pass
+		# TODO: Unimplemented, Using random guess
+		return super(KMeans, self).predict(file)

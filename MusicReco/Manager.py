@@ -1,6 +1,7 @@
 from MusicReco.models.db import *
 import pandas as pd
 from MusicReco.mllib.linear import Linear
+from MusicReco.mllib.KMeans import KMeans
 from utils import *
 from sklearn.cross_validation import train_test_split
 
@@ -12,8 +13,12 @@ class Manager:
     def __init__(self, model, learner=None):
         self.model = model
         self.learner = learner
-        self.mllib = Linear()
+        #self.mllib = Linear()
+        self.mllib  = KMeans()
         self.pluginFilter = None
+
+    def use_plugin(self, plugin):
+        self.pluginFilter = plugin
 
     def add_plugin(self, name, module_name):
         Plugin.get_or_create(name=name, module_name = module_name)
@@ -43,10 +48,11 @@ class Manager:
        for name, plugin in plugins.items():
             self.add_plugin(name, plugin)
 
-    def train(self, filter=None):
+    def train(self):
         """ Learning algorithms for audio classification """
         #Todo: Filter not implemented. Filter will make sure only 
         # Selected plugins are passed inside dataframe.
+
         df = self.mllib.getDataFrame()
 
         self.mllib.train(data= df)
@@ -59,7 +65,8 @@ class Manager:
         #TODO: Extend it to confusion matrix
         print("ACCURACY SCORE ", p / (p + n ))
 
-    def init_vectors(self, plugin= None, limit = 10):
+    def init_vectors(self,limit = 10):
         """ Apply plugins to music files """
         # process all files with state = 0 and no test files
-        self.mllib.process(plugin, limit, state=0, istest=0)
+        print("TRAINING AUDIO")
+        self.mllib.process(plugin=self.pluginFilter, limit=limit, state=0, istest=0)

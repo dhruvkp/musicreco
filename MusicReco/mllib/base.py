@@ -1,6 +1,7 @@
 from MusicReco.models.db import *
 import MusicReco.models.db
 import pandas as pd
+import random
 
 class Base:
 	def __init__(self):
@@ -11,18 +12,18 @@ class Base:
 		files  = self.model.get_audio_files(**filters)
 		#for k,v in filters.items():
 		#	files = files.filter()
+		print("plugin ", plugin)
 		plugins = self.model.get_plugins(name=plugin)
 
 		for file in files:
-			print(("TEST PROCESSING ", file.name))
+			print(("PROCESSING ", file.name))
 
 			for plugin in plugins:
 				plugin.process(file)
 
-
 	def test(self, limit= 10, plugin=None):
 		""" Load data from test file & test """
-		self.process(limit, plugin, istest=1)
+		self.process(limit=limit, plugin=plugin, istest=1)
 		return self.score(limit)
 
 	def getDataFrame(self):
@@ -55,3 +56,12 @@ class Base:
 				negative += 1
 				
 		return (positive, negative)
+
+	def train(self, data=None):
+		pass
+
+	def predict(self, file):
+		tags = settings['tags']
+		guessid = random.randint(0, len(tags)-1)
+		return tags[guessid]
+
