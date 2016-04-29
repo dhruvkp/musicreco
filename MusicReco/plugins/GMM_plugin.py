@@ -11,5 +11,9 @@ def createVector(filename):
 	mean = mfccs.mean(axis=1)
 	covar = np.cov(mfccs, rowvar=1)
 
+	iu1= np.triu_indices(n_mfcc)
+	ravelcovar = covar[iu1]
+	
 	mean.resize(1,n_mfcc)
-	return np.concatenate((mean, covar), axis=0)
+
+	return np.append(mean,ravelcovar)

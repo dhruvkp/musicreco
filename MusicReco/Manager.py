@@ -3,6 +3,8 @@ import pandas as pd
 from MusicReco.mllib.linear import Linear
 from MusicReco.mllib.KMeans import KMeans
 from MusicReco.mllib.KNN import KNN
+from MusicReco.mllib.svm import SVM
+from MusicReco.mllib.neural_network import Neural
 from utils import *
 from sklearn.cross_validation import train_test_split
 
@@ -15,7 +17,7 @@ class Manager:
         self.model = model
         self.learner = learner
         #self.mllib = Linear()
-        self.mllib  = KNN()
+        self.mllib  = Neural()
         self.pluginFilter = None
 
     def use_plugin(self, plugin):
