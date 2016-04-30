@@ -2,6 +2,7 @@ from MusicReco.models.db import *
 import MusicReco.models.db
 import pandas as pd
 import random
+from config import settings
 
 class Base:
 	def __init__(self):
@@ -63,3 +64,8 @@ class Base:
 		guessid = random.randint(0, len(tags)-1)
 		return tags[guessid]
 
+	def getIndex(self, tag):
+		return settings['tags'].index(tag)
+
+	def getTag(self, ind):
+		return settings['tags'][ind]

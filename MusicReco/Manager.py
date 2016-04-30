@@ -17,7 +17,7 @@ class Manager:
         self.model = model
         self.learner = learner
         #self.mllib = Linear()
-        self.mllib  = Neural()
+        self.mllib  = KMeans()
         self.pluginFilter = None
 
     def use_plugin(self, plugin):

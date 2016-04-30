@@ -4,6 +4,8 @@ import numpy as np
 from collections import OrderedDict, Counter
 from operator import itemgetter
 
+gamma = 0.068
+
 def kl_divergence(sigma1, sigma2, mu1, mu2):
     sigma2_inv = np.linalg.inv(sigma2)
     mean_diff = (mu1 - mu2)
@@ -13,7 +15,12 @@ def kl_divergence(sigma1, sigma2, mu1, mu2):
     + mean_diff.T.dot(sigma2_inv).dot(mean_diff)
 
 def KLsymmetric(sigma1, sigma2, mu1, mu2):
-	return np.abs(kl_divergence(sigma2, sigma1, mu2, mu1))
+	sigma1_inv = np.linalg.inv(sigma1)
+	sigma2_inv = np.linalg.inv(sigma2)
+	mean_diff = mu1 - mu2
+	kl = np.trace(sigma2_inv.dot(sigma1) + sigma1_inv.dot(sigma2)) - 2*mu1.shape[0] + mean_diff.T.dot(sigma2_inv + sigma1_inv).dot(mean_diff)
+
+	return np.exp(-gamma* kl)
 	#return np.abs(0.5*(kl_divergence(sigma1, sigma2, mu1, mu2) + kl_divergence(sigma2, sigma1, mu2, mu1)))
 
 

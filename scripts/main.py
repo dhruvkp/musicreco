@@ -23,7 +23,7 @@ def main():
 
     # Create feature vector of songs
     manager.use_plugin(plugin='GMM')
-    manager.init_vectors(limit = 10)
+    #manager.init_vectors(limit = 10)
     #manager.init_vectors()
 
     # learning algorithms
