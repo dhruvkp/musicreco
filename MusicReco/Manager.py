@@ -1,9 +1,9 @@
 from MusicReco.models.db import *
 import pandas as pd
-from MusicReco.mllib.linear import Linear
 from MusicReco.mllib.KMeans import KMeans
 from MusicReco.mllib.KNN import KNN
 from MusicReco.mllib.svm import SVM
+from MusicReco.mllib.ada_boost import ADABoost
 from MusicReco.mllib.neural_network import Neural
 from utils import *
 from sklearn.cross_validation import train_test_split
@@ -16,9 +16,20 @@ class Manager:
     def __init__(self, model, learner=None):
         self.model = model
         self.learner = learner
-        #self.mllib = Linear()
-        self.mllib  = KMeans()
+        self.mllib  = None
         self.pluginFilter = None
+
+    def use_ml(self, ml = None):
+        if ml == "ANN":
+            self.mllib = Neural()
+        elif ml == "SVM":
+            self.mllib = SVM()
+        elif ml == "KMEANS":
+            self.mllib = KMeans()
+        elif ml == "KNN":
+            self.mllib = KNN()
+        elif ml == "ADABOOST":
+            self.mllib = ADABoost()
 
     def use_plugin(self, plugin):
         self.pluginFilter = plugin
@@ -58,7 +69,7 @@ class Manager:
 
         df = self.mllib.getDataFrame()
 
-        self.mllib.train(data= df)
+        self.mllib.train(data= df, plugin = self.pluginFilter)
 
     def test(self):
         return self.mllib.test(plugin=self.pluginFilter)

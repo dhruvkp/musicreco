@@ -25,13 +25,19 @@ def KLsymmetric(sigma1, sigma2, mu1, mu2):
 
 
 class KNN(Base):
+	""" K Nearest neighbours for Music classification 
+		
+		It requires guassian mixture model to work with which requires mean and covariance matrices. Hence it is compatible with 
+		currently mfcc_simple.py
+	"""
+
 	def __init__(self, k=5):
 		super(KNN, self).__init__()
 		self.k = k
 
-	def train(self, data=None):
-		""" Training through KMeans """
-		X = data['GMM']
+	def train(self, data=None, plugin=None):
+		""" Training through KNN """
+		super(KNN, self).train(data, plugin)
 		# It contains 1 X N mean vectors and N X N covariance matrix where N is
 		# spectral features in MFCC.
 
@@ -40,15 +46,16 @@ class KNN(Base):
 		# no training required .. YIPEE !
 		
 
-	def predict(self,file):
+	def predict(self,file, plugin = None):
 		""" GUESS the output of single file """
-		data = file.vector['GMM']
+		super(KNN, self).predict(file, plugin)
+		data = file.vector[plugin]
 		rows = {}
 
 		# go through all the files and pick all training samples where GMM plugin Output generated
 		files = Audio.select().filter(state=1).filter(istest=0)
 		for file in files:
-			gmm = file.vector['GMM']
+			gmm = file.vector[plugin]
 			rows[(file.name, file.genre)] = KLsymmetric(gmm[1:,:], data[1:,:], gmm[0,:],data[0,:])
 		
 		sorted_rows = sorted(rows.items(), key= lambda x: x[1])[:self.k]

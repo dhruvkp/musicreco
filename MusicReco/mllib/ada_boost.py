@@ -1,26 +1,29 @@
-from sklearn import svm
+from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
 from sklearn.preprocessing import StandardScaler
 
 from .base import Base
 
-class Linear(Base):
+class ADABoost(Base):
 
 	def train(self, data = None, plugin=None):
 		""" With dataframe train mllib """
-		super(Linear, self).train(data, plugin)
-		self.clf = svm.SVC(gamma=0.001, C= 100.)
+		super(ADABoost, self).train(data, plugin)
+		
+		self.clf = AdaBoostClassifier()
+
 		X = self.X_train.iloc[:,:-1]
 		Y = self.X_train.iloc[:,-1]
-		
+
 		self.scaler = StandardScaler().fit(X)
 		X = self.scaler.transform(X)
+
 		self.clf.fit(X, Y)
 
 	def predict(self, file, plugin=None):
-		super(Linear, self).predict(file, plugin)
+		super(ADABoost, self).predict(file, plugin)
 
 		data = file.vector
 		X = data[plugin]
 		X = self.scaler.transform(X)
-		guess =  self.clf.predict(X)
+		guess = self.clf.predict(X)
 		return self.getTag(guess)

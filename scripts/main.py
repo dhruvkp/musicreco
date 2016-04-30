@@ -22,8 +22,9 @@ def main():
     manager.load_plugins(plugins)
 
     # Create feature vector of songs
-    manager.use_plugin(plugin='GMM')
-    #manager.init_vectors(limit = 10)
+    manager.use_plugin(plugin='AF')
+    manager.use_ml(ml = "ADABOOST")
+    #manager.init_vectors(limit = 50)
     #manager.init_vectors()
 
     # learning algorithms

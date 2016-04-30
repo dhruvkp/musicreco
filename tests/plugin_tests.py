@@ -1,6 +1,6 @@
 from MusicReco.models.db import *
-from MusicReco.plugins import fextract_plugin, centroid
-from MusicReco.plugins import GMM_plugin as plugin
+from MusicReco.plugins import mfcc_mean
+from MusicReco.plugins import af_features as plugin
 import numpy as np
 from scipy.stats import multivariate_normal, entropy
 
@@ -24,10 +24,10 @@ def main():
 	b1 = Audio.select().join(Tag).where(Tag.genre=='disco' and Audio.id==305).get()
 
 	res1 = plugin.createVector(a.path)
-	res11 = plugin.createVector(a1.path)
+	#res11 = plugin.createVector(a1.path)
 
-	res2 = plugin.createVector(b.path)
-	res22 = plugin.createVector(b1.path)
+	#res2 = plugin.createVector(b.path)
+	#res22 = plugin.createVector(b1.path)
 	print(res1.shape)
 	
 	# print(a.id, a1.id, b.id, b1.id)

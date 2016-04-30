@@ -6,36 +6,32 @@ import pandas as pd
 class KMeans(Base):
 
 	def __init__(self):
-		self.__convert = lambda x: pd.Series([i for i in x])
-		self.__ind = lambda x: self.getIndex(x)
 		super(KMeans, self).__init__()
 
-	def train(self, data=None):
+	def train(self, data=None, plugin=None):
 		""" Training through KMeans """
-		X = data['GMM']
-		# split the data in columns
+		super(KMeans, self).train(data, plugin)
 
-		X_train = data['GMM'].apply(self.__convert)
-
-		# Combine X_train & Y_train
-		X_train['class'] = data['class'].apply(self.__ind)
-
+		X = self.X_train.iloc[:,:-1]
+		Y = self.X_train.iloc[:,-1]
 		# It contains only N X M mfcc matrix
-		n_classes = len(np.unique(X_train['class']))
+		n_classes = len(np.unique(self.X_train['class']))
 
 		# create 10 clusters
-		self.clf = GMM(n_components = n_classes, init_params='wc', n_iter=20)
+		self.clf = GMM(n_components = n_classes, init_params='wc', n_iter=30, n_init=10)
 
 		# Initialize clf with each class mean
-		self.clf.means_ = np.array([ X_train[X_train['class'] == i].iloc[:,:-1].mean(axis=0) for i in range(n_classes)])
+		self.clf.means_ = np.array([ self.X_train[self.X_train['class'] == i].iloc[:,:-1].mean(axis=0) for i in range(n_classes)])
 
-		self.clf.fit(X_train.iloc[:,:-1], X_train.iloc[:,-1])
+		self.clf.fit(X, Y)
 
-	def predict(self,file):
+	def predict(self,file, plugin = None):
 		""" GUESS the output of single file """
-		# TODO: Unimplemented, Using random guess
-		data = file.vector
-		X = data['GMM']
-		guess = self.clf.predict(X)
+		
+		super(KMeans, self).predict(file, plugin)
 
+		data = file.vector
+		X = data[plugin]
+		guess = self.clf.predict(X)
+		
 		return self.getTag(guess)

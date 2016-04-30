@@ -13,9 +13,10 @@ tags:
   - rock
 
 plugins:
-  centroid: MusicReco.plugins.centroid
-  fextract: MusicReco.plugins.fextract_plugin
+  AF: MusicReco.plugins.af_features
+  FEXTRACT: MusicReco.plugins.mfcc_mean
   GMM:  MusicReco.plugins.GMM_plugin
+  MFCC: MusicReco.plugins.mfcc_simple
 
 db:
   database: databases/simreco.db
