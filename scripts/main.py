@@ -4,6 +4,7 @@ from MusicReco.models.db import Audio, Plugin
 import MusicReco.models.db
 from utils import load_collection
 
+
 def main():
     # import settings
     tags = settings['tags']
@@ -18,14 +19,16 @@ def main():
     manager.initialize_storage()
     
     # load collection
-    manager.load_collection(tags, train_dir, test_size)
+
+    #NOTE: Make sure you load collection only one time.
+    #manager.load_collection(tags, train_dir, test_size)
     manager.load_plugins(plugins)
 
     # Create feature vector of songs
     manager.use_plugin(plugin='AF')
-    manager.use_ml(ml = "ADABOOST")
-    #manager.init_vectors(limit = 50)
-    #manager.init_vectors()
+    
+    manager.use_ml(ml = "KMEANS")
+    manager.init_vectors(limit = 1000)
 
     # learning algorithms
     manager.train()

@@ -22,12 +22,16 @@ class Base:
 			for plugin in plugins:
 				plugin.process(file)
 
-	def test(self, limit= 10, plugin=None):
-		""" Load data from test file & test """
-		self.process(limit=limit, plugin=plugin, istest=1)
+	def test(self, limit= 1000, plugin=None):
+		""" Load data from test file & test
+			Generate vectors where state = 0 and istest = 1
+		"""
+
+		self.process(limit=limit, plugin=plugin, state = 0,istest=1)
 		return self.score(limit, plugin=plugin)
 
 	def getDataFrame(self):
+		""" Get the dataframe object from training where state = 1 and istest = 0 """
 		files = Audio.select().filter(state=1).filter(istest=0)
 
 		index = []
