@@ -15,19 +15,21 @@ def main():
     model = MusicReco.models.db
     manager = Manager(model)
 
+
     # initialize_storage
     manager.initialize_storage()
     
     # load collection
 
     #NOTE: Make sure you load collection only one time.
-    #manager.load_collection(tags, train_dir, test_size)
+    manager.load_collection(tags, train_dir, test_size)
     manager.load_plugins(plugins)
 
     # Create feature vector of songs
-    manager.use_plugin(plugin='AF')
+    manager.use_plugin(plugin='GMM')
     
-    manager.use_ml(ml = "KMEANS")
+    manager.use_ml(ml = "SVM")
+
     manager.init_vectors(limit = 1000)
 
     # learning algorithms
@@ -36,6 +38,8 @@ def main():
     psamples, nsamples =  manager.test()
 
     manager.accuracy_score(psamples, nsamples)
+
+    #manager.plot()
 
 if __name__ == '__main__':
     main();

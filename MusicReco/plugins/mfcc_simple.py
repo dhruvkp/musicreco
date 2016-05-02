@@ -3,23 +3,22 @@ import librosa
 
 def createVector(filename):
     """ Create a feature vector from audio file """
+    # it captures complete MFCC features 20. It is very much similar to GMM_plugin
+    # May be redundant, Can be removed in future updates.
+
+    # UPDATE: ignoring first 30% and last 30% frames to calculate mfcc feature vectors.
+    
     signal, fs = librosa.load(filename)
     mfccs = librosa.feature.mfcc(signal, sr=fs)
 
-    # MFCCS are two dimensional data. Need to save it
-    # Either we can use Dynamic Time Warping to calculate distance
-    # between two songs
-
-    # MFCC is of 20 feature vector for each frame ( 300 frames approx. )
-    # Either we represent them using gaussian distribution mu, Sigma
-    # or we take some average
-
-    # With guassian, we can approximate difference between two probabilties ( KL divergence, can use variational inference VERY IMPORTANT )
+    # Simple MFCC feature vectors FULL set
     
-    # mfccs are 20 X 1283 vectors
-    # get covariance matrix
+    l = mfccs.shape[1]
+    mfccs = mfccs[:,int(0.1*l):int(0.9*l)]
+    
     mean = mfccs.mean(axis=1)
     covar = np.cov(mfccs, rowvar =1)
-
+    
     mean.resize(1, mean.shape[0])
+    # it returns matrix.. not useful for machine learning algorithms except KNN
     return np.concatenate((mean, covar) ,axis=0)

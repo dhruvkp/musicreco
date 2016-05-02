@@ -1,4 +1,4 @@
-from sklearn import svm
+from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler
 
 from .base import Base
@@ -8,7 +8,7 @@ class Linear(Base):
 	def train(self, data = None, plugin=None):
 		""" With dataframe train mllib """
 		super(Linear, self).train(data, plugin)
-		self.clf = svm.SVC(gamma=0.001, C= 100.)
+		self.clf = LogisticRegression(C=100)
 		X = self.X_train.iloc[:,:-1]
 		Y = self.X_train.iloc[:,-1]
 		

@@ -1,6 +1,6 @@
 from MusicReco.models.db import *
 from MusicReco.plugins import mfcc_mean
-from MusicReco.plugins import af_features as plugin
+from MusicReco.plugins import rhythmic as plugin
 import numpy as np
 from scipy.stats import multivariate_normal, entropy
 

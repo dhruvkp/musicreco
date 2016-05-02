@@ -3,10 +3,13 @@ import pandas as pd
 from MusicReco.mllib.KMeans import KMeans
 from MusicReco.mllib.KNN import KNN
 from MusicReco.mllib.svm import SVM
+from MusicReco.mllib.linear import Linear
 from MusicReco.mllib.ada_boost import ADABoost
 from MusicReco.mllib.neural_network import Neural
 from utils import *
 from sklearn.cross_validation import train_test_split
+from sklearn.decomposition import PCA as sklearnPCA
+import numpy as np
 
 class Manager:
     """
@@ -30,6 +33,8 @@ class Manager:
             self.mllib = KNN()
         elif ml == "ADABOOST":
             self.mllib = ADABoost()
+        elif ml == "LINEAR":
+            self.mllib = Linear()
 
     def use_plugin(self, plugin):
         self.pluginFilter = plugin
@@ -73,6 +78,21 @@ class Manager:
 
     def test(self):
         return self.mllib.test(plugin=self.pluginFilter)
+
+    def plot(self):
+        
+        self.train()
+        # this will get data frame in self.mllib.X_train
+        X = self.mllib.X_train.iloc[:,:-1]
+        Y = self.mllib.X_train.iloc[:,-1]
+
+        # get data in 3D axis
+        scaler = sklearnPCA(n_components=3).fit(X)
+        X = scaler.transform(X)
+        Y = Y.reshape(Y.shape[0],1)
+        X = np.append(X, Y, 1)
+        
+        self.mllib.plot(X)
 
     def accuracy_score(self, p , n):
         """ GET accuracy score """

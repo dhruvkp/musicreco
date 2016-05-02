@@ -10,8 +10,7 @@ def createVector(filename):
 	signal, fs = librosa.load(filename)
 	n_mfcc = 12
 
-	mfccs = librosa.feature.mfcc(signal, sr=fs, n_mfcc=n_mfcc)
-	#mfccs = librosa.feature.chroma_stft(signal, sr=fs, n_chroma=n_mfcc)
+	mfccs = librosa.feature.chroma_stft(signal, sr=fs, n_chroma=n_mfcc)
 
 	l = mfccs.shape[1]
 	mfccs = mfccs[:,int(0.1*l):int(0.9*l)]

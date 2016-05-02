@@ -55,6 +55,7 @@ class KNN(Base):
 		# go through all the files and pick all training samples where GMM plugin Output generated
 		files = Audio.select().filter(state=1).filter(istest=0)
 		for file in files:
+			#print(file.name)
 			gmm = file.vector[plugin]
 			rows[(file.name, file.genre)] = KLsymmetric(gmm[1:,:], data[1:,:], gmm[0,:],data[0,:])
 		

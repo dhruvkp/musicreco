@@ -12,6 +12,7 @@ def extract_features(signal, features):
 
 def createVector(filename):
     """ Create a feature vector from audio file """
+    # It captures single vector mfcc for audio file.
     signal, fs = librosa.load(filename)
     mfccs = librosa.feature.mfcc(signal, sr=fs)
 
@@ -26,6 +27,6 @@ def createVector(filename):
     # With guassian, we can approximate difference between two probabilties ( KL divergence, can use variational inference VERY IMPORTANT )
     
     # mfccs are 20 X 1283 vectors
-    # get covariance matrix
+    # Get the mean values for each 20 of the MFCC features.
 
     return mfccs.mean(axis=1)

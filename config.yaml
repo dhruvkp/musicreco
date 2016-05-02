@@ -17,6 +17,9 @@ plugins:
   FEXTRACT: MusicReco.plugins.mfcc_mean
   GMM:  MusicReco.plugins.GMM_plugin
   MFCC: MusicReco.plugins.mfcc_simple
+  MDELTA: MusicReco.plugins.mfcc_delta
+  RHYTHM: MusicReco.plugins.rhythmic
+  CHROMA: MusicReco.plugins.chroma_features
 
 db:
-  database: databases/simreco.db
+  database: databases/simreco1.db

@@ -23,10 +23,9 @@ class KMeans(Base):
 		self.clf = GMM(n_components = n_classes, init_params='wc', n_iter=100, n_init=10, covariance_type='diag')
 
 		# Initialize clf with each class mean
-		#self.scaler = sklearnPCA(n_components=70).fit(X)
+		#self.scaler = sklearnPCA(n_components=3).fit(X)
 		self.scaler = StandardScaler().fit(X)
 		X = self.scaler.transform(X)
-		
 		Y = Y.reshape(Y.shape[0],1)
 		
 		X = np.append(X, Y, 1)

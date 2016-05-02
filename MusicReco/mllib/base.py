@@ -3,6 +3,12 @@ import MusicReco.models.db
 import pandas as pd
 import random
 from config import settings
+import numpy as np
+
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+from mpl_toolkits.mplot3d import proj3d
+from matplotlib.patches import FancyArrowPatch
 
 class Base:
 	def __init__(self):
@@ -69,8 +75,8 @@ class Base:
 
 		X = data[plugin]
 		# split the data in columns
-
-		self.X_train = data[plugin].apply(self.__convert)
+		
+		self.X_train = X.apply(self.__convert)
 
 		# Combine X_train & Y_train
 		self.X_train['class'] = data['class'].apply(self.__ind)
@@ -91,3 +97,29 @@ class Base:
 
 	def getTag(self, ind):
 		return settings['tags'][ind]
+
+	def plot(self, data=None):
+		#data = self.getDataFrame()
+		fig = plt.figure(figsize=(7,7))
+		ax = fig.add_subplot(111, projection='3d')
+		for i in range(10):
+			
+			X = data[data[:,-1] == i]
+			ax.plot(X[:,0],X[:,1],X[:,2],'o',color=np.random.rand(3,1), alpha=0.4, label='%s'%(settings['tags'][i]))
+			
+		plt.title('Transformed samples with class labels from matplotlib.mlab.PCA()')
+		plt.legend()
+		plt.show()
+
+	def plot1(self, data=None):
+		#data = self.getDataFrame()
+		fig = plt.figure(figsize=(7,7))
+		ax = fig.add_subplot(111, projection='3d')
+		for i in range(10):
+			
+			X = data[data[:-1] == i]
+			ax.plot(X[:,0],X[:,1],X[:,2],'o',color=np.random.rand(3,1), alpha=0.4, label='%s'%(settings['tags'][i]))
+			
+		plt.title('Transformed samples with class labels from matplotlib.mlab.PCA()')
+		plt.legend()
+		plt.show()
