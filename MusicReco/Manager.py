@@ -5,7 +5,7 @@ from MusicReco.mllib.KNN import KNN
 from MusicReco.mllib.svm import SVM
 from MusicReco.mllib.linear import Linear
 from MusicReco.mllib.ada_boost import ADABoost
-from MusicReco.mllib.neural_network import Neural
+# from MusicReco.mllib.neural_network import Neural
 from utils import *
 from sklearn.cross_validation import train_test_split
 from sklearn.decomposition import PCA as sklearnPCA

@@ -1,5 +1,5 @@
 
-%% bare_conf.tex
+%% bare_conf_compsoc.tex
 %% V1.4b
 %% 2015/08/26
 %% by Michael Shell
@@ -8,8 +8,8 @@
 %% for current contact information.
 %%
 %% This is a skeleton file demonstrating the use of IEEEtran.cls
-%% (requires IEEEtran.cls version 1.8b or later) with an IEEE
-%% conference paper.
+%% (requires IEEEtran.cls version 1.8b or later) with an IEEE Computer
+%% Society conference paper.
 %%
 %% Support sites:
 %% http://www.michaelshell.org/tex/ieeetran/
@@ -21,7 +21,7 @@
 %% Legal Notice:
 %% This code is offered as-is without any warranty either expressed or
 %% implied; without even the implied warranty of MERCHANTABILITY or
-%% FITNESS FOR A PARTICULAR PURPOSE!
+%% FITNESS FOR A PARTICULAR PURPOSE! 
 %% User assumes all risk.
 %% In no event shall the IEEE or any contributor to this code be liable for
 %% any damages or losses, including, but not limited to, incidental,
@@ -51,21 +51,18 @@
 
 
 
-\documentclass[conference]{IEEEtran}
-% Some Computer Society conferences also require the compsoc mode option,
-% but others use the standard conference format.
+\documentclass[conference,compsoc]{IEEEtran}
+% Some/most Computer Society conferences require the compsoc mode option,
+% but others may want the standard conference format.
 %
 % If IEEEtran.cls has not been installed into the LaTeX system files,
 % manually specify the path to it like:
-% \documentclass[conference]{../sty/IEEEtran}
+% \documentclass[conference,compsoc]{../sty/IEEEtran}
 
 
 
 
-\usepackage{amsmath}
-\usepackage{graphicx}
 
-\DeclareMathOperator{\Tr}{Tr}
 % Some very useful LaTeX packages include:
 % (uncomment the ones you want to load)
 
@@ -92,10 +89,17 @@
 
 
 
-\usepackage{hyperref}
+
 % *** CITATION PACKAGES ***
 %
-\usepackage{cite}
+\ifCLASSOPTIONcompsoc
+  % IEEE Computer Society needs nocompress option
+  % requires cite.sty v4.0 or later (November 2003)
+  \usepackage[nocompress]{cite}
+\else
+  % normal IEEE
+  \usepackage{cite}
+\fi
 % cite.sty was written by Donald Arseneau
 % V1.6 and later of IEEEtran pre-defines the format of the cite.sty package
 % \cite{} output to follow that of the IEEE. Loading the cite package will
@@ -110,7 +114,14 @@
 % The latest version can be obtained at:
 % http://www.ctan.org/pkg/cite
 % The documentation is contained in the cite.sty file itself.
-
+%
+% Note that some packages require special options to format as the Computer
+% Society requires. In particular, Computer Society  papers do not use
+% compressed citation ranges as is done in typical IEEE papers
+% (e.g., [1]-[4]). Instead, they list every citation separately in order
+% (e.g., [1], [2], [3], [4]). To get the latter we need to load the cite
+% package with the nocompress option which is supported by cite.sty v4.0
+% and later.
 
 
 
@@ -139,7 +150,7 @@
 % graphicx was written by David Carlisle and Sebastian Rahtz. It is
 % required if you want graphics, photos, etc. graphicx.sty is already
 % installed on most LaTeX systems. The latest version and documentation
-% can be obtained at:
+% can be obtained at: 
 % http://www.ctan.org/pkg/graphicx
 % Another good source of documentation is "Using Imported Graphics in
 % LaTeX2e" by Keith Reckdahl which can be found at:
@@ -221,7 +232,7 @@
 
 % *** SUBFIGURE PACKAGES ***
 %\ifCLASSOPTIONcompsoc
-%  \usepackage[caption=false,font=normalsize,labelfont=sf,textfont=sf]{subfig}
+%  \usepackage[caption=false,font=footnotesize,labelfont=sf,textfont=sf]{subfig}
 %\else
 %  \usepackage[caption=false,font=footnotesize]{subfig}
 %\fi
@@ -234,10 +245,10 @@
 % and invoke subfig.sty's "caption=false" package option (available since
 % subfig.sty version 1.3, 2005/06/28) as this is will preserve IEEEtran.cls
 % handling of captions.
-% Note that the Computer Society format requires a larger sans serif font
-% than the serif footnote size font used in traditional IEEE formatting
-% and thus the need to invoke different subfig.sty package options depending
-% on whether compsoc mode has been enabled.
+% Note that the Computer Society format requires a sans serif font rather
+% than the serif font used in traditional IEEE formatting and thus the need
+% to invoke different subfig.sty package options depending on whether
+% compsoc mode has been enabled.
 %
 % The latest version and documentation of subfig.sty can be obtained at:
 % http://www.ctan.org/pkg/subfig
@@ -323,24 +334,28 @@
 % not capitalized unless they are the first or last word of the title.
 % Linebreaks \\ can be used within to get better formatting as desired.
 % Do not put math or special symbols in the title.
-\title{Genre classification of Music files}
+\title{Bare Demo of IEEEtran.cls for\\ IEEE Computer Society Conferences}
 
 
 % author names and affiliations
 % use a multiple column layout for up to three different
 % affiliations
-\author{\IEEEauthorblockN{Puneet Girdhar}
-\IEEEauthorblockA{Department of Computer Science\\
-The University of Texas at Dallas\\
-Richardson, TX 75080\\
-Email: pxg151330@utdallas.edu}
+\author{\IEEEauthorblockN{Michael Shell}
+\IEEEauthorblockA{School of Electrical and\\Computer Engineering\\
+Georgia Institute of Technology\\
+Atlanta, Georgia 30332--0250\\
+Email: http://www.michaelshell.org/contact.html}
 \and
-\IEEEauthorblockN{Dhruvkumar Patel}
-\IEEEauthorblockA{Department of Computer Science\\
-The University of Texas at Dallas\\
-Richardson, TX 75080\\
-Email: drp150030@utdallas.edu}
-}
+\IEEEauthorblockN{Homer Simpson}
+\IEEEauthorblockA{Twentieth Century Fox\\
+Springfield, USA\\
+Email: homer@thesimpsons.com}
+\and
+\IEEEauthorblockN{James Kirk\\ and Montgomery Scott}
+\IEEEauthorblockA{Starfleet Academy\\
+San Francisco, California 96678-2391\\
+Telephone: (800) 555--1212\\
+Fax: (888) 555--1212}}
 
 % conference papers do not typically use \thanks and this command
 % is locked out in conference mode. If really needed, such as for
@@ -348,11 +363,13 @@ Email: drp150030@utdallas.edu}
 % after \documentclass
 
 % for over three affiliations, or if they all won't fit within the width
-% of the page, use this alternative format:
-%
+% of the page (and note that there is less available width in this regard for
+% compsoc conferences compared to traditional conferences), use this
+% alternative format:
+% 
 %\author{\IEEEauthorblockN{Michael Shell\IEEEauthorrefmark{1},
 %Homer Simpson\IEEEauthorrefmark{2},
-%James Kirk\IEEEauthorrefmark{3},
+%James Kirk\IEEEauthorrefmark{3}, 
 %Montgomery Scott\IEEEauthorrefmark{3} and
 %Eldon Tyrell\IEEEauthorrefmark{4}}
 %\IEEEauthorblockA{\IEEEauthorrefmark{1}School of Electrical and Computer Engineering\\
@@ -379,8 +396,7 @@ Email: drp150030@utdallas.edu}
 % As a general rule, do not put math, special symbols or citations
 % in the abstract
 \begin{abstract}
-    Music classification is an interesting problem with many applications. Music streaming services like Spotify, Apple Music and Google Play offer music catalog categorized into different genres and moods. It isn't clear however whether this process of music categorization is automated or manual. This feature is also not very commonly available for offline music files. The reason is that music genres are hard to describe systematically due to their subjective nature. In this project, we have applied audio signal processing and machine learning techniques to classify music files in different genres. We received comparable results to recent work in music genre classification task.\\
-\\    Keywords- Music Genre Classification, MIR, Music Information Retrieval
+The abstract goes here.
 \end{abstract}
 
 % no keywords
@@ -398,53 +414,29 @@ Email: drp150030@utdallas.edu}
 % creates the second title. It will be ignored for other modes.
 \IEEEpeerreviewmaketitle
 
+
+
 \section{Introduction}
 % no \IEEEPARstart
+This demo file is intended to serve as a ``starter file''
+for IEEE Computer Society conference papers produced under \LaTeX\ using
+IEEEtran.cls version 1.8b and later.
 % You must have at least 2 lines in the paragraph with the drop letter
 % (should never be an issue)
-For our project, we have used GTZAN genre collection dataset, which is available as part of Marsyas audio processing framework. G. Tzanetakis and P. Cook curated this dataset in their work\cite{gtzan} on music genre classification. Even though they did not intend for this dataset to be standard dataset for work on music genre classification task\cite{bob}, its easy availability on web has made it the primary dataset used by many\cite{michael}\cite{bob}\cite{base}. This dataset consists of 1000 audio tracks, each of 30 seconds duration. These tracks are spanned over ten different genres namely: Classical, Blues, Country, Hip Hop, Disco, Jazz, Metal, Popular, Reggae, and Rock.\par
-We investigate various machine learning algorithms on GTZAN dataset in this project, including K-nearest neighbours(KNN), K-means, multiclass SVM, and neural networks. For feature extraction task, we have relied on timbre-based features, namely Mel Frequency Cepstral Coefficients(MFCCs). This has been recommended by previous work on this problem\cite{zu}. There are many other audio features that can be used like power spectrum of the signal, FFT of audio signal, but it has been found that MFCCs represent given music file's timbre attributes, which is the most important aspect for genre classification problem. We have verified this by getting comparable accuracy values on given dataset as original work\cite{gtzan}. We have also included other features such as Zero Crossing Rate, Spectral Centroid, Spectral Bandwidth, Spectral Contrast, Spectral Rolloff in different feature extractor plugins.
+I wish you the best of success.
+
+\hfill mds
+ 
+\hfill August 26, 2015
+
+\subsection{Subsection Heading Here}
+Subsection text here.
 
 
-\section{Feature Extraction}
-We investigate several machine learning algorithms on variety of features. We extracted different features from each audio file like Zero Crossing Rate, Spectral Centroid, Spectral Bandwidth, Spectral Contrast, Spectral Rolloff, Chroma Vector etc. Then we save these features to a database, so we can use them in different combinations for different machine learning algorithms. These different combinations of features are 'Plugins'. There are 7 such plugins, namely AF,FEXTRACT,GMM,MFCC,MDELTA,RHYTHM,CHROMA. Analysis of each of these features and plugins is described below.
-\subsection{Zero Crossing Rate}
-Zero-crossings is the number of zero crossings of the signal in the time domain. It reflects the noisiness of the signal. Periodic sounds tend to have a small value of zero crossings while noisy sounds usually have a high value. The 'zero-crossing rate' is the rate of sign-changes along a signal, i.e., the rate at which the signal changes from positive to negative or back.\cite{wiki}\par
-ZCR is formally defined as:
-\begin{equation}
-    zcr=\frac{1}{T-1} \sum_{t=1}^{T-1} f(s_t s_{t-1} < 0) 
-\end{equation}
-where f(t) is 1 if t is true.\\
-Different genre represented as zero crossing rate vectors are represented in given figure. \\
-\includegraphics[width=\columnwidth]{ZCR_fig}
-We can clearly see that different genres have different zero crossing rate distributions.
-\subsection{Spectral Centroid}
-The spectral centroid is a measure used in digital signal processing to characterise a spectrum. It indicates where the "center of mass" of the spectrum is. Perceptually, it has a robust connection with the impression of "brightness" of a sound.\cite{wiki}\par
-It is calculated as the weighted mean of the frequencies present in the signal, determined using a Fourier transform, with their magnitudes as the weights:
-\begin{equation}
-    Centroid=\frac{\sum_{n=0}^{N-1}f(n)x(n)}{\sum_{n=0}^{N-1}x(n)} 
-\end{equation}
-Spectral Centroid distribution for different genres is given in following figure.\\
-\includegraphics[width=\columnwidth]{SC_fig}
-\subsection{Spectral Bandwidth}
-Spectral Bandwidth is the Wavelength interval in which a radiated spectral quantity is not less than half its maximum value. 
-\subsection{Spectral Contrast}
-Spectral contrast is defined as the decibel difference between peaks and valleys in the spectrum\cite{contrast}.
-Spectral contrast distribution for different genres is given in following figure.\\
-\includegraphics[width=\columnwidth]{SCON_fig}
-\subsection{Spectral Rolloff}
-Spectral Rolloff is a measure of the amount of the right-skewedness of the power spectrum. The spectral rolloff point is the fraction of bins in the power spectrum at which 85\% of the power is at lower frequencies\cite{jaudio}.
-Spectral Rolloff distribution for different genres is given in following figure.\\
-\includegraphics[width=\columnwidth]{SR_fig}
-\subsection{Chroma Vector}
-Chroma features are an interesting and powerful representation for music audio in which the entire spectrum is projected onto 12 bins representing the 12 distinct semitones (or chroma) of the musical octave. The term chroma closely relates to the twelve different pitch classes. Harmonic pitch class profiles (HPCP) is a group of features that a computer program extracts from an audio signal, based on a pitch class profile—a descriptor proposed in the context of a chord recognition system. Often, the twelve pitch spelling attributes are also referred to as chroma and the HPCP features are closely related to what is called chroma features or chromagrams\cite{wiki}.
-Chroma Vector distribution for different genres is given in following figure. This feature looks more promising than others in images.\\
-\includegraphics[width=\columnwidth]{CHROMA_fig}
-\subsection{MFCC}
-MFCC, Mel-Frequency Cepstral Co-efficients, a representation of the short-term power spectrum of a sound, based on a linear cosine transform of a log power spectrum on a nonlinear mel scale of frequency\cite{wiki}.
-MFCC vector distribution for different genres is given in following figure.\\
-\includegraphics[width=\columnwidth]{MFCC_fig}
-\section{Feature Combinations- Plugins}
+\subsubsection{Subsubsection Heading Here}
+Subsubsection text here.
+
+
 % An example of a floating figure using the graphicx package.
 % Note that \label must occur AFTER (or within) \caption.
 % For figures, \caption should occur after the \includegraphics.
@@ -461,7 +453,7 @@ MFCC vector distribution for different genres is given in following figure.\\
 %\begin{figure}[!t]
 %\centering
 %\includegraphics[width=2.5in]{myfigure}
-% where an .eps filename suffix will be assumed under latex,
+% where an .eps filename suffix will be assumed under latex, 
 % and a .pdf suffix will be assumed for pdflatex; or what has been declared
 % via \DeclareGraphicsExtensions.
 %\caption{Simulation results for the network.}
@@ -477,7 +469,7 @@ MFCC vector distribution for different genres is given in following figure.\\
 % The subfigure \label commands are set within each subfloat command,
 % and the \label for the overall figure must come after \caption.
 % \hfil is used as a separator to get equal spacing.
-% Watch out that the combined width of all the subfigures on a
+% Watch out that the combined width of all the subfigures on a 
 % line do not exceed the text width or a line break will occur.
 %
 %\begin{figure*}[!t]
@@ -534,81 +526,11 @@ MFCC vector distribution for different genres is given in following figure.\\
 % in-text middle ("here") positioning is typically not used, but it
 % is allowed and encouraged for Computer Society conferences (but
 % not Computer Society journals). Most IEEE journals/conferences use
-% top floats exclusively.
+% top floats exclusively. 
 % Note that, LaTeX2e, unlike IEEE journals/conferences, places
 % footnotes above bottom floats. This can be corrected via the
 % \fnbelowfloat command of the stfloats package.
 
-
-\section{Data preprocessing pipleline}
-\label{sec:Data preprocessing}
-Librosa( python package to process music ) is an open source software framework for python for music data analysis. It also provides basic building blocks necessary to create
-music retrieval systems. We downloaded GTZAN genre classification dataset popularly used for musical research purpose for our project. It contains 1000 audio tracks each 30
-seconds long. There are 10 genres represented each containing 100 tracks. All tracks are 22050 Hz Mono 16-bit audio files in .au format.
-
-We wrote a python script which reads audio files of 100 songs per genre , extract all features and saves in a sqlite database. Once feature vectors are stored, multiple models
-can be trained using combination of feature vectors. We further introduced custom matrix representation for each song which represents music feature mean vectors and covariances
-of those features as 1-D vector, effectively modelling features as Multi-variate Guassian distribution. Lastly, we applied different supervised learning algorithms
-using the reduced mean vector and covariance matrix as the features for each song to train on.
-
-** picture of song broken into feature vector
-
-
-Given a piece of music, each section of song(20 msec) is transformed into a vector with N dimensions and hence complete song can be transfomed into a feature matrix of N rows
-and M columns where M = number of frames.
-
-\section{Classification}
-Once the feature vectors are obtained, we train different classifiers on diffrent set of feature vectors. We divided the dataset in 67\% - 33\% ratio for training and testing respectively. Feature selection is done manually by hit and trial method. Following are the different classifiers used:
-
-\begin{enumerate}
-  \item Multi Label K Nearest neighbour
-  \item One-Vs-All approach with SVM
-  \item Neural Network
-  \item Non-Linear SVM
-  \item Logistic Regression
-  \item Ensembling
-\end{enumerate}
-
-
-\subsection{Multi Label K Nearest Neighbour}
-\label{sub:Multi Label K Nearest Neighbour}
-
-Intutively, Music belongs to one genre should share same audio features. If we consider audio featuers as N dimensional vector then
-music belongs to one genre should be close to each other. This is similar to the idea behind multi-Label KNN algorith in which
-it utilizes audio feature information of a music's k-nearest neighbour to infer its genres. We used above KL divergence measure (described below)
-for calculating similarity between two songs.
-
-Consider $ p(x) $ and $ q(x) $ to be two song multivariate guassian distributions obtained from feature extraction. Then we have the following:
-
-$$ 2KL(p||q) = \log{\left(\frac{\sum\nolimits_q}{\sum\nolimits_p}\right)} + Tr\left(\sum\nolimits_q^{-1}\sum\nolimits_p\right) $$
-
-$$    + {\left(\mu_p - \mu_q\right)}^{T}\sum\nolimits_q^{-1}(\mu_p - \mu_q) - d $$
-
-
-Since, KL divergence is not symmetric but the distance should be symmetric, we have:
-$$ {D}_{KL} =  KL\left(p||q\right) + KL\left(q||p\right) $$
-
-Here we experimented with multiple values of K and found out that K=33 yields the best output.
-
-\subsection{One vs All approach with SVM}
-\label{sub:One vs All approach with SVM}
-
-Also known as OVR (One vs Rest) multi class strategy. For each classifier, the class is fitted against all other classes. In addition to its computationally efficency only $n_classes$ classifiers are needed, one advantage of this approach is interpretability.
-
- We experimented with different cost penalties (1e-5 to 1e+5), loss functions (hinge and squared hinge) and penalty (L1 and L2) and observed that combination of L2 regularized hinge loss with C=100 yields the best result.
-
-\subsection{Neural Network}
-\label{sub:Neural Network}
-In order to train the neural network data set was first normalized. Normalization implies that all feature values from dataset should have zero mean and unit standard deviation.
-
-$$ X_n = \frac{X_n - \mu}{\sigma}$$
-
-where $\mu$ is mean feature value and $ \sigma $ is standard deviation.
-
-We trained neural network with 10\% of training instances as validation set which is the used to tune model parameters. We built a model with two hidden layer (10, 5), input layer size (256) and output layer size(10). We chose activation function as sigmoid function which gives us smooth non-linear function and cost function with regularization.
-
-
-We also attempted to utilize PCA to reduce the dimension of input data but didn't improve our accuracy much.
 
 
 
@@ -621,8 +543,15 @@ The conclusion goes here.
 % conference papers do not normally have an appendix
 
 
+
 % use section* for acknowledgment
-\section*{Acknowledgment}
+\ifCLASSOPTIONcompsoc
+  % The Computer Society usually uses the plural form
+  \section*{Acknowledgments}
+\else
+  % regular IEEE prefers the singular form
+  \section*{Acknowledgment}
+\fi
 
 
 The authors would like to thank...
@@ -655,16 +584,10 @@ The authors would like to thank...
 % (used to reserve space for the reference number labels box)
 \begin{thebibliography}{1}
 
-\bibitem{gtzan}
-    G. Tzanetakis and P. Cook, \emph{Musical genre classification of audio signals}.\hskip 1em IEEE Transactions on Audio and Speech Processing, 2002.
-\bibitem{michael}
-    Michael Haggblade, Yang Hong and Kenny Kao, \emph{Music Genre Classification}.\\ \url{http://cs229.stanford.edu/proj2011/HaggbladeHongKao-MusicGenreClassification.pdf}.
-\bibitem{bob}
-    Bob L. Sturm, \emph{An Analysis of the GTZAN Music Genre Dataset}. \hskip 1em MIRUM 2012.
-\bibitem{base}
-    Ioannis Panagakis, Emmanouil Benetos, and Constantine Kotropoulos, \emph{Music genre classification: a multilinear approach}. \hskip 1em ISMIR 2008.
-\bibitem{zu}
-    Fu, A., Lu, G., Ting, K.M., Zhang, D. \emph{A Survey of Audio-Based Music Classification and Annotation}. \hskip 1em IEEE transactions on multimedia 2010.
+\bibitem{IEEEhowto:kopka}
+H.~Kopka and P.~W. Daly, \emph{A Guide to \LaTeX}, 3rd~ed.\hskip 1em plus
+  0.5em minus 0.4em\relax Harlow, England: Addison-Wesley, 1999.
+
 \end{thebibliography}
 
 
@@ -672,3 +595,5 @@ The authors would like to thank...
 
 % that's all folks
 \end{document}
+
+

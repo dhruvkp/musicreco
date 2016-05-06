@@ -1,4 +1,4 @@
-training_dataset: /Users/puneet/Downloads/genres
+training_dataset: /home/dhruv/Downloads/genres
 test_size: 0.33
 tags:
   - blues
@@ -22,4 +22,4 @@ plugins:
   CHROMA: MusicReco.plugins.chroma_features
 
 db:
-  database: databases/simreco1.db
+  database: databases/simreco.db
