@@ -21,7 +21,7 @@
 %% Legal Notice:
 %% This code is offered as-is without any warranty either expressed or
 %% implied; without even the implied warranty of MERCHANTABILITY or
-%% FITNESS FOR A PARTICULAR PURPOSE! 
+%% FITNESS FOR A PARTICULAR PURPOSE!
 %% User assumes all risk.
 %% In no event shall the IEEE or any contributor to this code be liable for
 %% any damages or losses, including, but not limited to, incidental,
@@ -62,7 +62,8 @@
 
 
 
-
+\usepackage{amsmath}
+\DeclareMathOperator{\Tr}{Tr}
 % Some very useful LaTeX packages include:
 % (uncomment the ones you want to load)
 
@@ -136,7 +137,7 @@
 % graphicx was written by David Carlisle and Sebastian Rahtz. It is
 % required if you want graphics, photos, etc. graphicx.sty is already
 % installed on most LaTeX systems. The latest version and documentation
-% can be obtained at: 
+% can be obtained at:
 % http://www.ctan.org/pkg/graphicx
 % Another good source of documentation is "Using Imported Graphics in
 % LaTeX2e" by Keith Reckdahl which can be found at:
@@ -346,10 +347,10 @@ Email: drp150030@utdallas.edu}
 
 % for over three affiliations, or if they all won't fit within the width
 % of the page, use this alternative format:
-% 
+%
 %\author{\IEEEauthorblockN{Michael Shell\IEEEauthorrefmark{1},
 %Homer Simpson\IEEEauthorrefmark{2},
-%James Kirk\IEEEauthorrefmark{3}, 
+%James Kirk\IEEEauthorrefmark{3},
 %Montgomery Scott\IEEEauthorrefmark{3} and
 %Eldon Tyrell\IEEEauthorrefmark{4}}
 %\IEEEauthorblockA{\IEEEauthorrefmark{1}School of Electrical and Computer Engineering\\
@@ -420,7 +421,7 @@ We investigate various machine learning algorithms on GTZAN dataset in this proj
 %\begin{figure}[!t]
 %\centering
 %\includegraphics[width=2.5in]{myfigure}
-% where an .eps filename suffix will be assumed under latex, 
+% where an .eps filename suffix will be assumed under latex,
 % and a .pdf suffix will be assumed for pdflatex; or what has been declared
 % via \DeclareGraphicsExtensions.
 %\caption{Simulation results for the network.}
@@ -436,7 +437,7 @@ We investigate various machine learning algorithms on GTZAN dataset in this proj
 % The subfigure \label commands are set within each subfloat command,
 % and the \label for the overall figure must come after \caption.
 % \hfil is used as a separator to get equal spacing.
-% Watch out that the combined width of all the subfigures on a 
+% Watch out that the combined width of all the subfigures on a
 % line do not exceed the text width or a line break will occur.
 %
 %\begin{figure*}[!t]
@@ -493,11 +494,81 @@ We investigate various machine learning algorithms on GTZAN dataset in this proj
 % in-text middle ("here") positioning is typically not used, but it
 % is allowed and encouraged for Computer Society conferences (but
 % not Computer Society journals). Most IEEE journals/conferences use
-% top floats exclusively. 
+% top floats exclusively.
 % Note that, LaTeX2e, unlike IEEE journals/conferences, places
 % footnotes above bottom floats. This can be corrected via the
 % \fnbelowfloat command of the stfloats package.
 
+
+\section{Data preprocessing pipleline}
+\label{sec:Data preprocessing}
+Librosa( python package to process music ) is an open source software framework for python for music data analysis. It also provides basic building blocks necessary to create
+music retrieval systems. We downloaded GTZAN genre classification dataset popularly used for musical research purpose for our project. It contains 1000 audio tracks each 30
+seconds long. There are 10 genres represented each containing 100 tracks. All tracks are 22050 Hz Mono 16-bit audio files in .au format.
+
+We wrote a python script which reads audio files of 100 songs per genre , extract all features and saves in a sqlite database. Once feature vectors are stored, multiple models
+can be trained using combination of feature vectors. We further introduced custom matrix representation for each song which represents music feature mean vectors and covariances
+of those features as 1-D vector, effectively modelling features as Multi-variate Guassian distribution. Lastly, we applied different supervised learning algorithms
+using the reduced mean vector and covariance matrix as the features for each song to train on.
+
+** picture of song broken into feature vector
+
+
+Given a piece of music, each section of song(20 msec) is transformed into a vector with N dimensions and hence complete song can be transfomed into a feature matrix of N rows
+and M columns where M = number of frames.
+
+\section{Classification}
+Once the feature vectors are obtained, we train different classifiers on diffrent set of feature vectors. We divided the dataset in 67\% - 33\% ratio for training and testing respectively. Feature selection is done manually by hit and trial method. Following are the different classifiers used:
+
+\begin{enumerate}
+  \item Multi Label K Nearest neighbour
+  \item One-Vs-All approach with SVM
+  \item Neural Network
+  \item Non-Linear SVM
+  \item Logistic Regression
+  \item Ensembling
+\end{enumerate}
+
+
+\subsection{Multi Label K Nearest Neighbour}
+\label{sub:Multi Label K Nearest Neighbour}
+
+Intutively, Music belongs to one genre should share same audio features. If we consider audio featuers as N dimensional vector then
+music belongs to one genre should be close to each other. This is similar to the idea behind multi-Label KNN algorith in which
+it utilizes audio feature information of a music's k-nearest neighbour to infer its genres. We used above KL divergence measure (described below)
+for calculating similarity between two songs.
+
+Consider $ p(x) $ and $ q(x) $ to be two song multivariate guassian distributions obtained from feature extraction. Then we have the following:
+
+$$ 2KL(p||q) = \log{\left(\frac{\sum\nolimits_q}{\sum\nolimits_p}\right)} + Tr\left(\sum\nolimits_q^{-1}\sum\nolimits_p\right) $$
+
+$$    + {\left(\mu_p - \mu_q\right)}^{T}\sum\nolimits_q^{-1}(\mu_p - \mu_q) - d $$
+
+
+Since, KL divergence is not symmetric but the distance should be symmetric, we have:
+$$ {D}_{KL} =  KL\left(p||q\right) + KL\left(q||p\right) $$
+
+Here we experimented with multiple values of K and found out that K=33 yields the best output.
+
+\subsection{One vs All approach with SVM}
+\label{sub:One vs All approach with SVM}
+
+Also known as OVR (One vs Rest) multi class strategy. For each classifier, the class is fitted against all other classes. In addition to its computationally efficency only $n_classes$ classifiers are needed, one advantage of this approach is interpretability.
+
+ We experimented with different cost penalties (1e-5 to 1e+5), loss functions (hinge and squared hinge) and penalty (L1 and L2) and observed that combination of L2 regularized hinge loss with C=100 yields the best result.
+
+\subsection{Neural Network}
+\label{sub:Neural Network}
+In order to train the neural network data set was first normalized. Normalization implies that all feature values from dataset should have zero mean and unit standard deviation.
+
+$$ X_n = \frac{X_n - \mu}{\sigma}$$
+
+where $\mu$ is mean feature value and $ \sigma $ is standard deviation.
+
+We trained neural network with 10\% of training instances as validation set which is the used to tune model parameters. We built a model with two hidden layer (10, 5), input layer size (256) and output layer size(10). We chose activation function as sigmoid function which gives us smooth non-linear function and cost function with regularization.
+
+
+We also attempted to utilize PCA to reduce the dimension of input data but didn't improve our accuracy much.
 
 
 
@@ -561,5 +632,3 @@ The authors would like to thank...
 
 % that's all folks
 \end{document}
-
-
