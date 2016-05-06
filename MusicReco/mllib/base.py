@@ -36,12 +36,29 @@ class Base:
 		self.process(limit=limit, plugin=plugin, state = 0,istest=1)
 		return self.score(limit, plugin=plugin)
 
+	def getAllDataFrame(self):
+		""" Get the dataframe object from training where state = 1 and istest = 0 """
+		files = Audio.select().filter(state=1)
+
+		index = []
+		rows = []
+		for file in files:
+			row = {'class':file.genre}
+
+			index.append(file.name)
+			row.update(file.vector)
+
+			rows.append(row)
+
+		df = pd.DataFrame(index = index, data=rows)
+		return df
+
 	def getDataFrame(self):
 		""" Get the dataframe object from training where state = 1 and istest = 0 """
 		files = Audio.select().filter(state=1).filter(istest=0)
 
 		index = []
-		rows = [] 
+		rows = []
 		for file in files:
 			row = {'class':file.genre}
 
@@ -54,20 +71,17 @@ class Base:
 		return df
 
 	def score(self, limit, plugin=None):
-		positive = 0
-		negative = 0
+		predict = np.array([])
+		test = np.array([])
 
 		files  = Audio.select().filter(istest=1).limit(limit)
 		for file in files:
 			guess = self.predict(file, plugin=plugin)
 			print("guess -> ", guess, "Actual -> ", file.genre)
+			predict=np.append(predict, self.getIndex(guess))
+			test = np.append(test, self.getIndex(file.genre))
 
-			if guess == file.genre:
-				positive += 1
-			else:
-				negative += 1
-				
-		return (positive, negative)
+		return (predict, test)
 
 	def train(self, data=None, plugin = None):
 		if plugin is None:
@@ -75,7 +89,7 @@ class Base:
 
 		X = data[plugin]
 		# split the data in columns
-		
+
 		self.X_train = X.apply(self.__convert)
 
 		# Combine X_train & Y_train
@@ -91,9 +105,9 @@ class Base:
 			tags = settings['tags']
 			guessid = random.randint(0, len(tags)-1)
 			return tags[guessid]
-			
+
 	def getIndex(self, tag):
-		return settings['tags'].index(tag)
+		return int(settings['tags'].index(tag))
 
 	def getTag(self, ind):
 		return settings['tags'][ind]
@@ -103,10 +117,10 @@ class Base:
 		fig = plt.figure(figsize=(7,7))
 		ax = fig.add_subplot(111, projection='3d')
 		for i in range(10):
-			
+
 			X = data[data[:,-1] == i]
 			ax.plot(X[:,0],X[:,1],X[:,2],'o',color=np.random.rand(3,1), alpha=0.4, label='%s'%(settings['tags'][i]))
-			
+
 		plt.title('Transformed samples with class labels from matplotlib.mlab.PCA()')
 		plt.legend()
 		plt.show()
@@ -116,10 +130,10 @@ class Base:
 		fig = plt.figure(figsize=(7,7))
 		ax = fig.add_subplot(111, projection='3d')
 		for i in range(10):
-			
+
 			X = data[data[:-1] == i]
 			ax.plot(X[:,0],X[:,1],X[:,2],'o',color=np.random.rand(3,1), alpha=0.4, label='%s'%(settings['tags'][i]))
-			
+
 		plt.title('Transformed samples with class labels from matplotlib.mlab.PCA()')
 		plt.legend()
 		plt.show()

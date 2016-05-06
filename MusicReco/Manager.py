@@ -10,7 +10,12 @@ from utils import *
 from sklearn.cross_validation import train_test_split
 from sklearn.decomposition import PCA as sklearnPCA
 import numpy as np
+import sklearn.metrics as metrics
+from sklearn.metrics import confusion_matrix, classification_report
+from config import settings
 
+
+import matplotlib.pyplot as plt
 class Manager:
     """
         Manager to load music files, save feature vectors in DB.
@@ -58,7 +63,7 @@ class Manager:
 
         for path, file, tag in train_files:
             self.add_file(path, file, tag)
-        
+
         for path, file, tag in test_files:
             self.add_file(path, file, tag, istest=1)
 
@@ -69,7 +74,7 @@ class Manager:
 
     def train(self):
         """ Learning algorithms for audio classification """
-        #Todo: Filter not implemented. Filter will make sure only 
+        #Todo: Filter not implemented. Filter will make sure only
         # Selected plugins are passed inside dataframe.
 
         df = self.mllib.getDataFrame()
@@ -80,7 +85,7 @@ class Manager:
         return self.mllib.test(plugin=self.pluginFilter)
 
     def plot(self):
-        
+
         self.train()
         # this will get data frame in self.mllib.X_train
         X = self.mllib.X_train.iloc[:,:-1]
@@ -91,13 +96,34 @@ class Manager:
         X = scaler.transform(X)
         Y = Y.reshape(Y.shape[0],1)
         X = np.append(X, Y, 1)
-        
+
         self.mllib.plot(X)
 
-    def accuracy_score(self, p , n):
+    def plot_confusion_matrix(self,cm, title='Confusion matrix', cmap=plt.cm.Blues):
+        plt.imshow(cm, interpolation='nearest', cmap=cmap)
+        plt.title(title)
+        plt.colorbar()
+        tick_marks = np.arange(len(settings['tags']))
+        plt.xticks(tick_marks, settings['tags'], rotation=45)
+        plt.yticks(tick_marks, settings['tags'])
+        plt.tight_layout()
+        plt.ylabel('True label')
+        plt.xlabel('Predicted label')
+        plt.savefig("result.jpg")
+
+
+    def accuracy_score(self, predict , test):
         """ GET accuracy score """
         #TODO: Extend it to confusion matrix
-        print("ACCURACY SCORE ", p / (p + n ))
+        #print("ACCURACY SCORE ", p / (p + n ))
+        print(metrics.classification_report(test, predict, target_names = settings['tags']))
+
+        print(metrics.accuracy_score(test, predict))
+
+        cm = metrics.confusion_matrix(test, predict)
+        self.plot_confusion_matrix(cm)
+
+
 
     def init_vectors(self,limit = 10):
         """ Apply plugins to music files """

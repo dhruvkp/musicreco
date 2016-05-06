@@ -1,5 +1,7 @@
-from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
+from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier, BaggingClassifier
 from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import SGDClassifier
+from sklearn import svm
 
 from .base import Base
 
@@ -8,8 +10,10 @@ class ADABoost(Base):
 	def train(self, data = None, plugin=None):
 		""" With dataframe train mllib """
 		super(ADABoost, self).train(data, plugin)
-		
-		self.clf = AdaBoostClassifier()
+
+		self.clf = BaggingClassifier(svm.SVC(gamma=0.001, C= 100, kernel='linear', probability=True), n_estimators=10)
+		#self.clf = AdaBoostClassifier(svm.SVC(gamma=0.001, C= 100, kernel='linear', probability=True), n_estimators=10)
+		#self.clf = AdaBoostClassifier(SGDClassifier(loss='hinge'),algorithm='SAMME', n_estimators=10)
 
 		X = self.X_train.iloc[:,:-1]
 		Y = self.X_train.iloc[:,-1]

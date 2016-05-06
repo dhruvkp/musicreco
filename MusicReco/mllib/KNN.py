@@ -10,8 +10,8 @@ def kl_divergence(sigma1, sigma2, mu1, mu2):
     sigma2_inv = np.linalg.inv(sigma2)
     mean_diff = (mu1 - mu2)
 
-    return np.log(np.linalg.det(sigma1)/np.linalg.det(sigma2)) 
-    + np.trace(sigma2_inv.dot(sigma1)) - mu1.shape[0] 
+    return np.log(np.linalg.det(sigma1)/np.linalg.det(sigma2))
+    + np.trace(sigma2_inv.dot(sigma1)) - mu1.shape[0]
     + mean_diff.T.dot(sigma2_inv).dot(mean_diff)
 
 def KLsymmetric(sigma1, sigma2, mu1, mu2):
@@ -25,13 +25,13 @@ def KLsymmetric(sigma1, sigma2, mu1, mu2):
 
 
 class KNN(Base):
-	""" K Nearest neighbours for Music classification 
-		
-		It requires guassian mixture model to work with which requires mean and covariance matrices. Hence it is compatible with 
+	""" K Nearest neighbours for Music classification
+
+		It requires guassian mixture model to work with which requires mean and covariance matrices. Hence it is compatible with
 		currently mfcc_simple.py
 	"""
 
-	def __init__(self, k=5):
+	def __init__(self, k=33):
 		super(KNN, self).__init__()
 		self.k = k
 
@@ -42,9 +42,9 @@ class KNN(Base):
 		# spectral features in MFCC.
 
 		#print(X[0].shape)
-		
+
 		# no training required .. YIPEE !
-		
+
 
 	def predict(self,file, plugin = None):
 		""" GUESS the output of single file """
@@ -58,15 +58,15 @@ class KNN(Base):
 			#print(file.name)
 			gmm = file.vector[plugin]
 			rows[(file.name, file.genre)] = KLsymmetric(gmm[1:,:], data[1:,:], gmm[0,:],data[0,:])
-		
+
 		sorted_rows = sorted(rows.items(), key= lambda x: x[1])[:self.k]
 
 		cnt = Counter()
-		
+
 		#print("KNN : file", file.name)
 		for key,value in sorted_rows:
 			#print(key, value)
 			cnt[key] += 1
-			
+
 		# find the max count class
 		return max(cnt)[1]

@@ -412,7 +412,7 @@ We investigate several machine learning algorithms on variety of features. We ex
 Zero-crossings is the number of zero crossings of the signal in the time domain. It reflects the noisiness of the signal. Periodic sounds tend to have a small value of zero crossings while noisy sounds usually have a high value. The 'zero-crossing rate' is the rate of sign-changes along a signal, i.e., the rate at which the signal changes from positive to negative or back.\cite{wiki}\par
 ZCR is formally defined as:
 \begin{equation}
-    zcr=\frac{1}{T-1} \sum_{t=1}^{T-1} f(s_t s_{t-1} < 0) 
+    zcr=\frac{1}{T-1} \sum_{t=1}^{T-1} f(s_t s_{t-1} < 0)
 \end{equation}
 where f(t) is 1 if t is true.\\
 Different genre represented as zero crossing rate vectors are represented in given figure. \\
@@ -422,12 +422,12 @@ We can clearly see that different genres have different zero crossing rate distr
 The spectral centroid is a measure used in digital signal processing to characterise a spectrum. It indicates where the "center of mass" of the spectrum is. Perceptually, it has a robust connection with the impression of "brightness" of a sound.\cite{wiki}\par
 It is calculated as the weighted mean of the frequencies present in the signal, determined using a Fourier transform, with their magnitudes as the weights:
 \begin{equation}
-    Centroid=\frac{\sum_{n=0}^{N-1}f(n)x(n)}{\sum_{n=0}^{N-1}x(n)} 
+    Centroid=\frac{\sum_{n=0}^{N-1}f(n)x(n)}{\sum_{n=0}^{N-1}x(n)}
 \end{equation}
 Spectral Centroid distribution for different genres is given in following figure.\\
 \includegraphics[width=\columnwidth]{SC_fig}
 \subsection{Spectral Bandwidth}
-Spectral Bandwidth is the Wavelength interval in which a radiated spectral quantity is not less than half its maximum value. 
+Spectral Bandwidth is the Wavelength interval in which a radiated spectral quantity is not less than half its maximum value.
 \subsection{Spectral Contrast}
 Spectral contrast is defined as the decibel difference between peaks and valleys in the spectrum\cite{contrast}.
 Spectral contrast distribution for different genres is given in following figure.\\
@@ -542,9 +542,7 @@ MFCC vector distribution for different genres is given in following figure.\\
 
 \section{Data preprocessing pipleline}
 \label{sec:Data preprocessing}
-Librosa( python package to process music ) is an open source software framework for python for music data analysis. It also provides basic building blocks necessary to create
-music retrieval systems. We downloaded GTZAN genre classification dataset popularly used for musical research purpose for our project. It contains 1000 audio tracks each 30
-seconds long. There are 10 genres represented each containing 100 tracks. All tracks are 22050 Hz Mono 16-bit audio files in .au format.
+We used Librosa an open source software framework for python for music data analysis. It also provides basic building blocks necessary to create music retrieval systems. We downloaded GTZAN genre classification dataset popularly used for musical research purpose for our project. It contains 1000 audio tracks each 30 seconds long. There are 10 genres represented each containing 100 tracks. All tracks are 22050 Hz Mono 16-bit audio files in .au format.
 
 We wrote a python script which reads audio files of 100 songs per genre , extract all features and saves in a sqlite database. Once feature vectors are stored, multiple models
 can be trained using combination of feature vectors. We further introduced custom matrix representation for each song which represents music feature mean vectors and covariances
@@ -558,7 +556,7 @@ Given a piece of music, each section of song(20 msec) is transformed into a vect
 and M columns where M = number of frames.
 
 \section{Classification}
-Once the feature vectors are obtained, we train different classifiers on diffrent set of feature vectors. We divided the dataset in 67\% - 33\% ratio for training and testing respectively. Feature selection is done manually by hit and trial method. Following are the different classifiers used:
+Once the feature vectors were obtained, we trained classifiers on diffrent set of feature vectors. We divided the dataset in 67\% - 33\% ratio for training and testing respectively. Feature selection is done manually by hit and trial method. Following were the different classifiers used:
 
 \begin{enumerate}
   \item Multi Label K Nearest neighbour
@@ -566,17 +564,15 @@ Once the feature vectors are obtained, we train different classifiers on diffren
   \item Neural Network
   \item Non-Linear SVM
   \item Logistic Regression
-  \item Ensembling
+  \item AdaBoost
+  \item Bagging Classifier
 \end{enumerate}
 
 
 \subsection{Multi Label K Nearest Neighbour}
 \label{sub:Multi Label K Nearest Neighbour}
 
-Intutively, Music belongs to one genre should share same audio features. If we consider audio featuers as N dimensional vector then
-music belongs to one genre should be close to each other. This is similar to the idea behind multi-Label KNN algorith in which
-it utilizes audio feature information of a music's k-nearest neighbour to infer its genres. We used above KL divergence measure (described below)
-for calculating similarity between two songs.
+Intutively, Music belongs to one genre should share same audio features. If we consider audio featuers as N dimensional vector then music belongs to one genre should be close to each other. This is similar to the idea behind multi-Label KNN algorith in which it utilizes audio feature information of a music's k-nearest neighbour to infer its genres. We used above KL divergence measure (described below) for calculating similarity between two songs.
 
 Consider $ p(x) $ and $ q(x) $ to be two song multivariate guassian distributions obtained from feature extraction. Then we have the following:
 
@@ -585,7 +581,7 @@ $$ 2KL(p||q) = \log{\left(\frac{\sum\nolimits_q}{\sum\nolimits_p}\right)} + Tr\l
 $$    + {\left(\mu_p - \mu_q\right)}^{T}\sum\nolimits_q^{-1}(\mu_p - \mu_q) - d $$
 
 
-Since, KL divergence is not symmetric but the distance should be symmetric, we have:
+Since, KL divergence is not symmetric but the distance should be symmetric, Hence we used following similarity measure:
 $$ {D}_{KL} =  KL\left(p||q\right) + KL\left(q||p\right) $$
 
 Here we experimented with multiple values of K and found out that K=33 yields the best output.
@@ -610,11 +606,41 @@ We trained neural network with 10\% of training instances as validation set whic
 
 We also attempted to utilize PCA to reduce the dimension of input data but didn't improve our accuracy much.
 
+\subsection{Non-Linear SVM}
+\label{subs:Non-Linear SVM}
+Same as with Neural network, we first normalized the data and then feed it into SVM. SVMs are based on two properties: margin maximization (which allows for a good generalization of the classifier) and nonlinear transformation of the feature space with kernels(as data set is more easily seperable in high dimensional feature space).
+
+
+We used Python scikit package to implement Non-linear SVM algorithm. It implements \"One-against-one\" approach (Knerr et. al 1990) for multiclass classification. if $n_class$ is the number of classes, then $n_class * (n_class - 1 ) / 2$ classifiers are constructed and each one trains data from two classes.
+
+\subsection{Logistics Regression}
+\label{sec:Logistics Regression}
+It is again implemented using One-vs-rest scheme. We used regularized logistics regression with lbfgs solver. LBFGS solver works with L2 regularization. where best hyperparameter is selected by cross-validator StratifiedKFold mechanism.
+
+
+\subsection{AdaBoost}
+\label{sub:AdaBoost Classification}
+We used Adaboost algorithm to fit a sequence of weak learners on repeatedly modified versions of data. We experimented it with number of esimtaros and $learning_rate$ parameter. $n_estimator$ controls the number of iterations on models and $learning_rate$ controls the contribution of weak learners in final combination.
+
+Here we experimented it with SVM as base estimator for adaboost and observed good classification results.
+
+\subsection{Bagging Classifier}
+\label{sub:Baagging Classification}
+We have also experimented on Bagging classifiers which fits base classifier each on random subsets of the original dataset and then aggregate the individual predictions(either by voting or by averaging) to form a final prediction. Such a meta-estimator is very useful in reducing the variance of base estimator by introducing randomization into its construction procedure and then making ensemble out of it.
+
+Here we experimented it with SVM as base estimator as bagging classifier with varying number of model estimators.
+
+\section{Results}
+\label{sec:Results}
+
+\subsection{Music Genre Classification}
+\label{sub:Music Genre Classification}
+Classification accuracy varied between the different machine learning techniques and genres. We got best accuracy with SVM classifier closed to 74\% accuracy. Reggae and Rock were difficult ones to classify whereas jazz achieved highest classification score. Here are some confusion matrix results for different classifiers:
+
 
 
 \section{Conclusion}
 The conclusion goes here.
-
 
 
 
