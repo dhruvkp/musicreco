@@ -12,7 +12,9 @@ import matplotlib.pyplot as plt
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import Pipeline
 
+from sklearn.linear_model import SGDClassifier
 from sklearn.learning_curve import learning_curve
+from sklearn.linear_model import LogisticRegression
 def plot_learning_curve(estimator, title, X, y, ylim=None, cv=None,
                         train_sizes=np.linspace(.1, 1.0, 5)):
     """
@@ -68,7 +70,7 @@ def plot_learning_curve(estimator, title, X, y, ylim=None, cv=None,
     if ylim:
         plt.ylim(ylim)
     plt.title(title)
-    plt.show()
+    #plt.show()
 
 def plot_validation_curve(estimator, title, X , y , ylim = None, cv= None, param_name=None, param_range=None):
 
@@ -93,6 +95,7 @@ def plot_validation_curve(estimator, title, X , y , ylim = None, cv= None, param
 
 
 def plots(manager):
+    from sklearn.neural_network import MLPClassifier
     df = manager.mllib.getAllDataFrame()
 
     manager.mllib.train(df,plugin='AF')
@@ -100,13 +103,16 @@ def plots(manager):
     y = manager.mllib.X_train.iloc[:,-1]
 
     clf = SVC(gamma=0.001, C= 100, kernel='rbf')
+    #clf = MLPClassifier(algorithm='l-bfgs', alpha=1e-9,activation='tanh', tol = 1e-6,
+    #    hidden_layer_sizes=(10, 3), random_state=1)
     p = Pipeline([("Scaler", StandardScaler()), ("svm", clf)])
-    #plot_learning_curve(p, "Learning Curve SVC", X, y, ylim=(0.0, 1.01), train_sizes=np.linspace(0.1, 1.0, 5))
+    plot_learning_curve(p, "Learning Curve SVC", X, y, ylim=(0.0, 1.01), train_sizes=np.linspace(0.1, 1.0, 5))
     #print(p.get_params().keys())
 
-    param_range = np.linspace(1, 500, 5)
-    plot_validation_curve(p, "Validation Curve SVC", X, y, ylim=(0.0, 1.01), cv=10, param_name="svm__C", param_range=param_range)
-    plt.savefig("validation.png")
+    #param_range = np.linspace(10,500,10)
+    #param_range=[(3,3),(5,3),(10,3),(15,3),(25,3), (40,3)]
+    #plot_validation_curve(p, "Validation Curve Logistic", X, y, ylim=(0.0, 1.01), cv=10, param_name="svm__hidden_layer_sizes", param_range=param_range)
+    plt.savefig("learning.png")
     #plt.show()
 
 
@@ -133,19 +139,19 @@ def main():
     # Create feature vector of songs
     manager.use_plugin(plugin='AF')
 
-    manager.use_ml(ml = "LINEAR")
+    manager.use_ml(ml = "ADABOOST")
 
     #manager.init_vectors(limit = 1000)
 
     # learning algorithms
-    manager.train()
+    #manager.train()
 
-    predict, test =  manager.test()
+    #predict, test =  manager.test()
 
-    manager.accuracy_score(predict, test)
+    #manager.accuracy_score(predict, test)
 
     #manager.plot()
-    #plots(manager)
+    plots(manager)
 
 
 

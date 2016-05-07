@@ -2,6 +2,7 @@ from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier, Bagging
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import SGDClassifier
 from sklearn import svm
+from sklearn.pipeline import Pipeline
 
 from .base import Base
 
@@ -11,7 +12,11 @@ class ADABoost(Base):
 		""" With dataframe train mllib """
 		super(ADABoost, self).train(data, plugin)
 
-		self.clf = BaggingClassifier(svm.SVC(gamma=0.001, C= 100, kernel='linear', probability=True), n_estimators=10)
+		#cl = svm.SVC(gamma=0.001, C= 100, kernel='linear', probability=True)
+		cl = SGDClassifier(loss='hinge')
+		p = Pipeline([("Scaler", StandardScaler()), ("svm", cl)])
+
+		self.clf = BaggingClassifier(p, n_estimators=10)
 		#self.clf = AdaBoostClassifier(svm.SVC(gamma=0.001, C= 100, kernel='linear', probability=True), n_estimators=10)
 		#self.clf = AdaBoostClassifier(SGDClassifier(loss='hinge'),algorithm='SAMME', n_estimators=10)
 
