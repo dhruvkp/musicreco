@@ -415,7 +415,7 @@ ZCR is formally defined as:
     zcr=\frac{1}{T-1} \sum_{t=1}^{T-1} f(s_t s_{t-1} < 0)
 \end{equation}
 where f(t) is 1 if t is true.\\
-Different genre represented as zero crossing rate vectors are represented in given figure. \\
+Files from different genres from GTZAN dataset represented as zero crossing rate vectors are represented in given figure. \\
 \includegraphics[width=\columnwidth]{ZCR_fig}
 We can clearly see that different genres have different zero crossing rate distributions.
 \subsection{Spectral Centroid}
@@ -424,27 +424,28 @@ It is calculated as the weighted mean of the frequencies present in the signal, 
 \begin{equation}
     Centroid=\frac{\sum_{n=0}^{N-1}f(n)x(n)}{\sum_{n=0}^{N-1}x(n)}
 \end{equation}
-Spectral Centroid distribution for different genres is given in following figure.\\
+Spectral Centroid distribution for different genre files is given in following figure.\\
 \includegraphics[width=\columnwidth]{SC_fig}
 \subsection{Spectral Bandwidth}
 Spectral Bandwidth is the Wavelength interval in which a radiated spectral quantity is not less than half its maximum value.
+Spectral Bandwidth distribution for different genre files is given in following figure.\\
+\includegraphics[width=\columnwidth]{SB_fig}
 \subsection{Spectral Contrast}
 Spectral contrast is defined as the decibel difference between peaks and valleys in the spectrum\cite{contrast}.
-Spectral contrast distribution for different genres is given in following figure.\\
+Spectral contrast distribution for different genre files is given in following figure.\\
 \includegraphics[width=\columnwidth]{SCON_fig}
 \subsection{Spectral Rolloff}
 Spectral Rolloff is a measure of the amount of the right-skewedness of the power spectrum. The spectral rolloff point is the fraction of bins in the power spectrum at which 85\% of the power is at lower frequencies\cite{jaudio}.
-Spectral Rolloff distribution for different genres is given in following figure.\\
+Spectral Rolloff distribution for different genre files is given in following figure.\\
 \includegraphics[width=\columnwidth]{SR_fig}
 \subsection{Chroma Vector}
 Chroma features are an interesting and powerful representation for music audio in which the entire spectrum is projected onto 12 bins representing the 12 distinct semitones (or chroma) of the musical octave. The term chroma closely relates to the twelve different pitch classes. Harmonic pitch class profiles (HPCP) is a group of features that a computer program extracts from an audio signal, based on a pitch class profile—a descriptor proposed in the context of a chord recognition system. Often, the twelve pitch spelling attributes are also referred to as chroma and the HPCP features are closely related to what is called chroma features or chromagrams\cite{wiki}.
-Chroma Vector distribution for different genres is given in following figure. This feature looks more promising than others in images.\\
+Chroma Vector distribution for different genre files is given in following figure. From these image representations, this feature looks more promising than others for genre classification.\\
 \includegraphics[width=\columnwidth]{CHROMA_fig}
 \subsection{MFCC}
 MFCC, Mel-Frequency Cepstral Co-efficients, a representation of the short-term power spectrum of a sound, based on a linear cosine transform of a log power spectrum on a nonlinear mel scale of frequency\cite{wiki}.
-MFCC vector distribution for different genres is given in following figure.\\
+MFCC vector distribution for different genre files is given in following figure.\\
 \includegraphics[width=\columnwidth]{MFCC_fig}
-\section{Feature Combinations- Plugins}
 % An example of a floating figure using the graphicx package.
 % Note that \label must occur AFTER (or within) \caption.
 % For figures, \caption should occur after the \includegraphics.
@@ -572,7 +573,7 @@ Once the feature vectors were obtained, we trained classifiers on diffrent set o
 \subsection{Multi Label K Nearest Neighbour}
 \label{sub:Multi Label K Nearest Neighbour}
 
-Intutively, Music belongs to one genre should share same audio features. If we consider audio featuers as N dimensional vector then music belongs to one genre should be close to each other. This is similar to the idea behind multi-Label KNN algorith in which it utilizes audio feature information of a music's k-nearest neighbour to infer its genres. We used above KL divergence measure (described below) for calculating similarity between two songs.
+Intutively, Music belongs to one genre should share same audio features. If we consider audio featuers as N dimensional vector then music belongs to one genre should be close to each other. This is similar to the idea behind multi-Label KNN algorithm in which it utilizes audio feature information of a music's k-nearest neighbour to infer its genres. We used above KL divergence measure (described below) for calculating similarity between two songs.
 
 Consider $ p(x) $ and $ q(x) $ to be two song multivariate guassian distributions obtained from feature extraction. Then we have the following:
 
@@ -593,6 +594,8 @@ Also known as OVR (One vs Rest) multi class strategy. For each classifier, the c
 
  We experimented with different cost penalties (1e-5 to 1e+5), loss functions (hinge and squared hinge) and penalty (L1 and L2) and observed that combination of L2 regularized hinge loss with C=100 yields the best result.
 
+\includegraphics[width=\columnwidth]{LINEARSVC}
+
 \subsection{Neural Network}
 \label{sub:Neural Network}
 In order to train the neural network data set was first normalized. Normalization implies that all feature values from dataset should have zero mean and unit standard deviation.
@@ -606,6 +609,9 @@ We trained neural network with 10\% of training instances as validation set whic
 
 We also attempted to utilize PCA to reduce the dimension of input data but didn't improve our accuracy much.
 
+Confusion matrix for ANN is given below.
+
+\includegraphics[width=\columnwidth]{ANN}
 \subsection{Non-Linear SVM}
 \label{subs:Non-Linear SVM}
 Same as with Neural network, we first normalized the data and then feed it into SVM. SVMs are based on two properties: margin maximization (which allows for a good generalization of the classifier) and nonlinear transformation of the feature space with kernels(as data set is more easily seperable in high dimensional feature space).
@@ -613,9 +619,13 @@ Same as with Neural network, we first normalized the data and then feed it into 
 
 We used Python scikit package to implement Non-linear SVM algorithm. It implements \"One-against-one\" approach (Knerr et. al 1990) for multiclass classification. if $n_class$ is the number of classes, then $n_class * (n_class - 1 ) / 2$ classifiers are constructed and each one trains data from two classes.
 
+Confusion matrix for SVM is given below.
+\includegraphics[width=\columnwidth]{SVM}
 \subsection{Logistics Regression}
 \label{sec:Logistics Regression}
 It is again implemented using One-vs-rest scheme. We used regularized logistics regression with lbfgs solver. LBFGS solver works with L2 regularization. where best hyperparameter is selected by cross-validator StratifiedKFold mechanism.
+Confusion matrix for Logistic Regression is given below.
+\includegraphics[width=\columnwidth]{LOGISTIC}
 
 
 \subsection{AdaBoost}
@@ -623,21 +633,44 @@ It is again implemented using One-vs-rest scheme. We used regularized logistics 
 We used Adaboost algorithm to fit a sequence of weak learners on repeatedly modified versions of data. We experimented it with number of esimtaros and $learning_rate$ parameter. $n_estimator$ controls the number of iterations on models and $learning_rate$ controls the contribution of weak learners in final combination.
 
 Here we experimented it with SVM as base estimator for adaboost and observed good classification results.
+Confusion matrix for AdaBoost is given below.
+\includegraphics[width=\columnwidth]{ADABOOST}
 
 \subsection{Bagging Classifier}
 \label{sub:Baagging Classification}
 We have also experimented on Bagging classifiers which fits base classifier each on random subsets of the original dataset and then aggregate the individual predictions(either by voting or by averaging) to form a final prediction. Such a meta-estimator is very useful in reducing the variance of base estimator by introducing randomization into its construction procedure and then making ensemble out of it.
 
 Here we experimented it with SVM as base estimator as bagging classifier with varying number of model estimators.
+Confusion matrix for Bagging classifier is given below.
+\includegraphics[width=\columnwidth]{BAGGING}
 
-\section{Results}
+\section{Parameter Learning}
 \label{sec:Results}
 
-\subsection{Music Genre Classification}
-\label{sub:Music Genre Classification}
-Classification accuracy varied between the different machine learning techniques and genres. We got best accuracy with SVM classifier closed to 74\% accuracy. Reggae and Rock were difficult ones to classify whereas jazz achieved highest classification score. Here are some confusion matrix results for different classifiers:
+We applied parameter learning technique to Non-linear SVM classifier. Due to time constraints, we could not do parameter learning for all the classifiers. We can clearly see in following figure that C=100 is optimal value for SVM parameter:
 
+\section{Classification Metrics}
+Classification accuracy varied between the different machine learning techniques and genres. We got best accuracy with SVM classifier closed to 74\% accuracy. Reggae and Rock were difficult ones to classify whereas jazz achieved highest classification score. Here are some confusion matrix results for different classifiers. 
+\subsection{Precision}
+The precision is the ratio $\frac{tp}{tp + fp}$ where tp is the number of true positives and fp the number of false positives. The precision is intuitively the ability of the classifier not to label as positive a sample that is negative.
+Below is the confusion matrix for precision values for different classifiers against different genres:
 
+\includegraphics[width=\columnwidth]{precision}
+We can clearly see that Jazz genre is having highest precision for almost all classifiers. Classical genre seems second best and consistent precision values for all classifiers. Rock seems to have low precision consistenly, because it is often confused as Metal, as can be seen from true label axis of Rock genre in Confusion matrices of diffrent classifiers.
+\subsection{Recall}
+The recall is the ratio $\frac{tp}{tp + fn}$ where tp is the number of true positives and fn the number of false negatives. The recall is intuitively the ability of the classifier to find all the positive samples.
+Below is the confusion matrix for Recall values for different classifiers against different genres:
+
+\includegraphics[width=\columnwidth]{recall}
+Metal genre is having the highest recall among all classifiers. We can clearly see in confusion matrix images of different classifiers that almost all true labels of Metal have been classified as Metal. That's why the recall is high for Metal.
+\subsection{F1 Score}
+F1 score is harmonic mean of precision and recall values.
+\begin{equation}
+    F1=2 \cdot\frac{precision\cdot recall}{precision + recall}
+\end{equation}
+Below is the confusion matrix for F1 values for different classifiers against different genres:
+
+\includegraphics[width=\columnwidth]{f1score}
 
 \section{Conclusion}
 The conclusion goes here.
@@ -687,10 +720,16 @@ The authors would like to thank...
     Michael Haggblade, Yang Hong and Kenny Kao, \emph{Music Genre Classification}.\\ \url{http://cs229.stanford.edu/proj2011/HaggbladeHongKao-MusicGenreClassification.pdf}.
 \bibitem{bob}
     Bob L. Sturm, \emph{An Analysis of the GTZAN Music Genre Dataset}. \hskip 1em MIRUM 2012.
+\bibitem{wiki}
+    \url{http://www.wikipedia.com}
 \bibitem{base}
     Ioannis Panagakis, Emmanouil Benetos, and Constantine Kotropoulos, \emph{Music genre classification: a multilinear approach}. \hskip 1em ISMIR 2008.
 \bibitem{zu}
     Fu, A., Lu, G., Ting, K.M., Zhang, D. \emph{A Survey of Audio-Based Music Classification and Annotation}. \hskip 1em IEEE transactions on multimedia 2010.
+\bibitem{contrast}
+    Jun Yang, Fa-Long Luo, Arye Nehorai. \emph{Spectral contrast enhancement: Algorithms and comparisons}. \hskip 1em Speech Communication - Special issue on speech processing for hearing aids, Vol 39, 2003.
+\bibitem{jaudio}
+    \url{http://jaudio.sourceforge.net/jaudio10/features/spectralrolloffpoint.html}
 \end{thebibliography}
 
 
