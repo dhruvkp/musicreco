@@ -127,13 +127,13 @@ def main():
     # load collection
 
     #NOTE: Make sure you load collection only one time.
-    manager.load_collection(tags, train_dir, test_size)
-    manager.load_plugins(plugins)
+#     manager.load_collection(tags, train_dir, test_size)
+#     manager.load_plugins(plugins)
 
     # Create feature vector of songs
     manager.use_plugin(plugin='AF')
 
-    manager.use_ml(ml = "LINEAR")
+    manager.use_ml(ml = "ADABOOST")
 
     #manager.init_vectors(limit = 1000)
 

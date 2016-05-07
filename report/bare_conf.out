@@ -7,11 +7,19 @@
 \BOOKMARK [2][-]{subsection.2.5}{Spectral Rolloff}{section.2}% 7
 \BOOKMARK [2][-]{subsection.2.6}{Chroma Vector}{section.2}% 8
 \BOOKMARK [2][-]{subsection.2.7}{MFCC}{section.2}% 9
-\BOOKMARK [1][-]{section.3}{Feature Combinations- Plugins}{}% 10
-\BOOKMARK [1][-]{section.4}{Data preprocessing pipleline}{}% 11
-\BOOKMARK [1][-]{section.5}{Classification}{}% 12
-\BOOKMARK [2][-]{subsection.5.1}{Multi Label K Nearest Neighbour}{section.5}% 13
-\BOOKMARK [2][-]{subsection.5.2}{One vs All approach with SVM}{section.5}% 14
-\BOOKMARK [2][-]{subsection.5.3}{Neural Network}{section.5}% 15
-\BOOKMARK [1][-]{section.6}{Conclusion}{}% 16
-\BOOKMARK [1][-]{section*.2}{References}{}% 17
+\BOOKMARK [1][-]{section.3}{Data preprocessing pipleline}{}% 10
+\BOOKMARK [1][-]{section.4}{Classification}{}% 11
+\BOOKMARK [2][-]{subsection.4.1}{Multi Label K Nearest Neighbour}{section.4}% 12
+\BOOKMARK [2][-]{subsection.4.2}{One vs All approach with SVM}{section.4}% 13
+\BOOKMARK [2][-]{subsection.4.3}{Neural Network}{section.4}% 14
+\BOOKMARK [2][-]{subsection.4.4}{Non-Linear SVM}{section.4}% 15
+\BOOKMARK [2][-]{subsection.4.5}{Logistics Regression}{section.4}% 16
+\BOOKMARK [2][-]{subsection.4.6}{AdaBoost}{section.4}% 17
+\BOOKMARK [2][-]{subsection.4.7}{Bagging Classifier}{section.4}% 18
+\BOOKMARK [1][-]{section.5}{Parameter Learning}{}% 19
+\BOOKMARK [1][-]{section.6}{Classification Metrics}{}% 20
+\BOOKMARK [2][-]{subsection.6.1}{Precision}{section.6}% 21
+\BOOKMARK [2][-]{subsection.6.2}{Recall}{section.6}% 22
+\BOOKMARK [2][-]{subsection.6.3}{F1 Score}{section.6}% 23
+\BOOKMARK [1][-]{section.7}{Conclusion}{}% 24
+\BOOKMARK [1][-]{section*.2}{References}{}% 25
