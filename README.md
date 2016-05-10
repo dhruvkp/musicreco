@@ -1,6 +1,6 @@
 # Music classification System
 
-This app classifies music files in different genres.
+This app classifies music files in different genres. This project is tested on GTZAN dataset
 
 ### How to run
 Edit config.yaml for database name and run 
@@ -56,3 +56,9 @@ manager.use_ml("<NEW_MODULE_NAME>")
 ### Report
 Please look at report.pdf in reports folder for music genre classification accuracy.
 
+
+### Authors
+Please email any query to:
+
+Puneet Girdhar (pxg151330@utdallas.edu)
+Dhruv Kumar Patel (drp150030@utdallas.edu)
