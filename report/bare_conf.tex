@@ -561,10 +561,10 @@ Once the feature vectors were obtained, we trained classifiers on diffrent set o
 
 \begin{enumerate}
   \item Multi Label K Nearest neighbour
-  \item One-Vs-All approach with SVM
+  \item Linear SVC
   \item Neural Network
   \item SVM
-  \item Logistic Regression
+  \item Logistic Classifier
   \item SGD Classifer
   \item AdaBoost
   \item Bagging Classifier
@@ -589,12 +589,14 @@ $$ {D}_{KL} =  KL\left(p||q\right) + KL\left(q||p\right) $$
 Here we experimented with multiple values of K and found out that K=11 yields the best output.
 \includegraphics[width=\columnwidth]{KNN}
 
-\subsection{One vs All approach with SVM}
-\label{sub:One vs All approach with SVM}
+\subsection{Linear SVC}
+\label{sub:Linear SVC}
 
-Also known as OVR (One vs Rest) multi class strategy. For each classifier, the class is fitted against all other classes. In addition to its computationally efficency only n{\_}classes classifiers are needed, one advantage of this approach is interpretability.
+Linear Support Vector classification.
 
- We experimented with different cost penalties (1e-5 to 1e+5), loss functions (hinge and squared hinge) and penalty (L1 and L2) and observed that combination of L2 regularized hinge loss with C=100 yields the best result with guassian kernel.
+Similar to SVM with parameter kernel='linear'. It uses OVR (One vs Rest) strategy for multi class classifier. For each classifier, the class is fitted against other classes. In addition to its computationally efficency only n{\_}classes classifiers are needed, one advantage of this approach is interpretability.
+
+ We experimented with different cost penalties (1e-5 to 1e+5), loss functions (hinge and squared hinge) and penalty (L1 and L2) and observed that combination of L2 regularized hinge loss with C=100 yields the best result.
 
 \includegraphics[width=\columnwidth]{LINEARSVC}
 
@@ -619,14 +621,14 @@ Confusion matrix for ANN is given below.
 Same as with Neural network, we first normalized the data and then feed it into SVM. SVMs are based on two properties: margin maximization (which allows for a good generalization of the classifier) and nonlinear transformation of the feature space with kernels(as data set is more easily seperable in high dimensional feature space).
 
 
-We used Python scikit package to implement Non-linear SVM algorithm. It implements \"One-against-one\" approach (Knerr et. al 1990) for multiclass classification. if $n{\_}class$ is the number of classes, then $n{\_}class * (n{\_}class - 1 ) / 2$ classifiers are constructed and each one trains data from two classes.
+We used Python scikit package to implement Non-linear SVM algorithm. It implements \"One-against-one\" approach (Knerr et. al 1990) for multiclass classification. if $n{\_}class$ is the number of classes, then $n{\_}class * (n{\_}class - 1 ) / 2$ classifiers are constructed and each one trains data from two classes. Guassian kernel with C= 100 yields the best result.
 
 Confusion matrix for SVM is given below.
 \includegraphics[width=\columnwidth]{SVM}
 
-\subsection{Logistics Regression}
-\label{sec:Logistics Regression}
-It is again implemented using One-vs-rest scheme. We used regularized logistics regression with lbfgs solver. LBFGS solver works with L2 regularization. where best hyperparameter is selected by cross-validator StratifiedKFold mechanism.
+\subsection{Logistics Classifier}
+\label{sec:Logistics Classifier}
+It is again implemented using One-vs-rest scheme. We used regularized logistics Classifier with lbfgs solver (Limited Broyden-Felcher-Goldfarb-Shanno algorithm). LBFGS solver works with L2 regularization where best hyperparameter is selected by cross-validator StratifiedKFold mechanism.
 Confusion matrix for Logistic Regression is given below.
 \includegraphics[width=\columnwidth]{LOGISTIC}
 
@@ -646,7 +648,7 @@ Confusion matrix for AdaBoost is given below.
 
 \subsection{Bagging Classifier}
 \label{sub:Baagging Classification}
-We have also experimented on Bagging classifiers which fits base classifier each on random subsets of the original dataset and then aggregate the individual predictions(either by voting or by averaging) to form a final prediction. Such a meta-estimator is very useful in reducing the variance of base estimator by introducing randomization into its construction procedure and then making ensemble out of it.
+We have also experimented on Bagging classifiers which fits base classifier each on random subsets of the original dataset and then aggregate the individual predictions by majority vote to form a final prediction. Such a meta-estimator is very useful in reducing the variance of base estimator by introducing randomization into its construction procedure and then making ensemble out of it.
 
 Here we experimented it with SGDClassifier as base estimator in bagging classifier with varying number of model estimators.
 Confusion matrix for Bagging classifier is given below.
@@ -695,7 +697,7 @@ Here is accuracy report on test dataset for various classifiers.
 \hline
 \textbf{CLASSIFIER}                  & \textbf{ACCURACY}         \\ \hline
 \multicolumn{1}{|l|}{SVM}            & \multicolumn{1}{l|}{0.74} \\ \hline
-\multicolumn{1}{|l|}{One vs All SVM}     & \multicolumn{1}{l|}{0.63} \\ \hline
+\multicolumn{1}{|l|}{LINEAR SVC}     & \multicolumn{1}{l|}{0.65} \\ \hline
 \multicolumn{1}{|l|}{SGD}            & \multicolumn{1}{l|}{0.66} \\ \hline
 \multicolumn{1}{|l|}{ADABOOST}       & \multicolumn{1}{l|}{0.71} \\ \hline
 \multicolumn{1}{|l|}{BAGGING}        & \multicolumn{1}{l|}{0.68} \\ \hline
