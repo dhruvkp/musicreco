@@ -548,10 +548,9 @@ We used Librosa an open source software framework for python for music data anal
 We wrote a python script which reads audio files of 100 songs per genre , extract all features and saves in a sqlite database. Once feature vectors are stored, multiple models
 can be trained using combination of feature vectors. We further introduced custom matrix representation for each song which represents music feature mean vectors and covariances
 of those features as 1-D vector, effectively modelling features as Multi-variate Guassian distribution. Lastly, we applied different supervised learning algorithms
-using the reduced mean vector and covariance matrix as the features for each song to train on.
+using the reduced mean vector and covariance matrix as the features for each song to train on.\\
 
-** picture of song broken into feature vector
-
+\includegraphics[width=\columnwidth]{pipeline}
 
 Given a piece of music, each section of song(20 msec) is transformed into a vector with N dimensions and hence complete song can be transfomed into a feature matrix of N rows
 and M columns where M = number of frames.
@@ -678,19 +677,12 @@ Below is the confusion matrix for F1 values for different classifiers against di
 \includegraphics[width=\columnwidth]{f1score}
 
 \section{Conclusion}
-The conclusion goes here.
-
-
+According to our analysis, music files consist of many important features, especially for genre classification task. We were able to get better accuracy results by using mutiple features together. It is also observed that selection of classification algorithm affects the classification accuracy of different genres. In general, SVM outperformed other algorithms, but then again Neural Network was not used to its full potential. Some genres have better precision values, while other have better recall values and some genres have poor results for both. This means that, Jazz and Classical were overall easier to classify than other genres. In future work, we can apply neaural network and especially deep learning architecture to this problem which can probably model this problem better. Also if we can acquire more domain knowledge about genre classification, we can apply Bayesian Network techniques and construct problem-specific Bayesian model for this problem.
 
 % conference papers do not normally have an appendix
 
 
 % use section* for acknowledgment
-\section*{Acknowledgment}
-
-
-The authors would like to thank...
-
 
 
 
