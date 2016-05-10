@@ -407,7 +407,7 @@ We investigate various machine learning algorithms on GTZAN dataset in this proj
 
 
 \section{Feature Extraction}
-We investigate several machine learning algorithms on variety of features. We extracted different features from each audio file like Zero Crossing Rate, Spectral Centroid, Spectral Bandwidth, Spectral Contrast, Spectral Rolloff, Chroma Vector etc. Then we save these features to a database, so we can use them in different combinations for different machine learning algorithms. These different combinations of features are 'Plugins'. There are 7 such plugins, namely AF,FEXTRACT,GMM,MFCC,MDELTA,RHYTHM,CHROMA. Analysis of each of these features and plugins is described below.
+We investigate several machine learning algorithms on variety of features. We extracted different features from each audio file like Zero Crossing Rate, Spectral Centroid, Spectral Bandwidth, Spectral Contrast, Spectral Rolloff, Chroma Vector etc. Then we save these features to a database, so we can use them in different combinations for different machine learning algorithms. These different combinations of features are 'Plugins'. Analysis of each of these features is described below. In these descriptions, we have included images of feature vectors for each genre. These images help us in learning that how each feature is important in classifying different genres.
 \subsection{Zero Crossing Rate}
 Zero-crossings is the number of zero crossings of the signal in the time domain. It reflects the noisiness of the signal. Periodic sounds tend to have a small value of zero crossings while noisy sounds usually have a high value. The 'zero-crossing rate' is the rate of sign-changes along a signal, i.e., the rate at which the signal changes from positive to negative or back.\cite{wiki}\par
 ZCR is formally defined as:
@@ -647,8 +647,13 @@ Confusion matrix for Bagging classifier is given below.
 \section{Parameter Learning}
 \label{sec:Results}
 
-We applied parameter learning technique to Non-linear SVM classifier. Due to time constraints, we could not do parameter learning for all the classifiers. We can clearly see in following figure that C=100 is optimal value for SVM parameter:
+Hyperparameters of our classifiers are learnt based on the performance on validation set. Here we are showing parameter learning technique to Non-linear SVM classifier. We can clearly see in following figure that C=100 is optimal value for SVM parameter:
 
+\includegraphics[width=\columnwidth]{validation}
+\section{Overfitting Analysis}
+To validate our SVM model does not suffer from bias/variance error, we applied learning curve analysis, which shows the training score is much greater than the validation score. Adding more training samples will most likely increase generalization. This proves that our model does not suffer form any bias vairance errors. 
+
+\includegraphics[width=\columnwidth]{learning}
 \section{Classification Metrics}
 Classification accuracy varied between the different machine learning techniques and genres. We got best accuracy with SVM classifier closed to 74\% accuracy. Reggae and Rock were difficult ones to classify whereas jazz achieved highest classification score. Here are some confusion matrix results for different classifiers. 
 \subsection{Precision}
