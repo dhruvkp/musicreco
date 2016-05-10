@@ -64,6 +64,8 @@
 
 \usepackage{amsmath}
 \usepackage{graphicx}
+\usepackage{float}
+\restylefloat{table}
 
 \DeclareMathOperator{\Tr}{Tr}
 % Some very useful LaTeX packages include:
@@ -407,7 +409,8 @@ We investigate various machine learning algorithms on GTZAN dataset in this proj
 
 
 \section{Feature Extraction}
-We investigate several machine learning algorithms on variety of features. We extracted different features from each audio file like Zero Crossing Rate, Spectral Centroid, Spectral Bandwidth, Spectral Contrast, Spectral Rolloff, Chroma Vector etc. Then we save these features to a database, so we can use them in different combinations for different machine learning algorithms. These different combinations of features are 'Plugins'. Analysis of each of these features is described below. In these descriptions, we have included images of feature vectors for each genre. These images help us in learning that how each feature is important in classifying different genres.
+First step to any machine learning algorithm is to extract features i.e. to identify the components of audio signal that are good for classification.
+Analysis of some features is described below. In these descriptions, we have included images of feature vectors for each genre. These images help us in learning that how each feature is important in classyfing different genres.
 \subsection{Zero Crossing Rate}
 Zero-crossings is the number of zero crossings of the signal in the time domain. It reflects the noisiness of the signal. Periodic sounds tend to have a small value of zero crossings while noisy sounds usually have a high value. The 'zero-crossing rate' is the rate of sign-changes along a signal, i.e., the rate at which the signal changes from positive to negative or back.\cite{wiki}\par
 ZCR is formally defined as:
@@ -564,6 +567,7 @@ Once the feature vectors were obtained, we trained classifiers on diffrent set o
   \item Neural Network
   \item Non-Linear SVM
   \item Logistic Regression
+  \item SGD Classifer
   \item AdaBoost
   \item Bagging Classifier
 \end{enumerate}
@@ -572,7 +576,7 @@ Once the feature vectors were obtained, we trained classifiers on diffrent set o
 \subsection{Multi Label K Nearest Neighbour}
 \label{sub:Multi Label K Nearest Neighbour}
 
-Intutively, Music belongs to one genre should share same audio features. If we consider audio featuers as N dimensional vector then music belongs to one genre should be close to each other. This is similar to the idea behind multi-Label KNN algorithm in which it utilizes audio feature information of a music's k-nearest neighbour to infer its genres. We used above KL divergence measure (described below) for calculating similarity between two songs.
+Intutively, Music belongs to one genre should share same audio features. If we consider audio featuers as N dimensional vector then music belongs to one genre should be close to each other. This is similar to the idea behind multi-Label KNN algorithm in which it utilizes audio feature information of a music's k-nearest neighbour to infer its genres. We used KL divergence measure (described below) for calculating similarity between two songs.
 
 Consider $ p(x) $ and $ q(x) $ to be two song multivariate guassian distributions obtained from feature extraction. Then we have the following:
 
@@ -585,11 +589,12 @@ Since, KL divergence is not symmetric but the distance should be symmetric, Henc
 $$ {D}_{KL} =  KL\left(p||q\right) + KL\left(q||p\right) $$
 
 Here we experimented with multiple values of K and found out that K=33 yields the best output.
+\includegraphics[width=\columnwidth]{KNN}
 
 \subsection{One vs All approach with SVM}
 \label{sub:One vs All approach with SVM}
 
-Also known as OVR (One vs Rest) multi class strategy. For each classifier, the class is fitted against all other classes. In addition to its computationally efficency only $n_classes$ classifiers are needed, one advantage of this approach is interpretability.
+Also known as OVR (One vs Rest) multi class strategy. For each classifier, the class is fitted against all other classes. In addition to its computationally efficency only n{\_}classes classifiers are needed, one advantage of this approach is interpretability.
 
  We experimented with different cost penalties (1e-5 to 1e+5), loss functions (hinge and squared hinge) and penalty (L1 and L2) and observed that combination of L2 regularized hinge loss with C=100 yields the best result.
 
@@ -616,10 +621,11 @@ Confusion matrix for ANN is given below.
 Same as with Neural network, we first normalized the data and then feed it into SVM. SVMs are based on two properties: margin maximization (which allows for a good generalization of the classifier) and nonlinear transformation of the feature space with kernels(as data set is more easily seperable in high dimensional feature space).
 
 
-We used Python scikit package to implement Non-linear SVM algorithm. It implements \"One-against-one\" approach (Knerr et. al 1990) for multiclass classification. if $n_class$ is the number of classes, then $n_class * (n_class - 1 ) / 2$ classifiers are constructed and each one trains data from two classes.
+We used Python scikit package to implement Non-linear SVM algorithm. It implements \"One-against-one\" approach (Knerr et. al 1990) for multiclass classification. if $n{\_}class$ is the number of classes, then $n{\_}class * (n{\_}class - 1 ) / 2$ classifiers are constructed and each one trains data from two classes.
 
 Confusion matrix for SVM is given below.
 \includegraphics[width=\columnwidth]{SVM}
+
 \subsection{Logistics Regression}
 \label{sec:Logistics Regression}
 It is again implemented using One-vs-rest scheme. We used regularized logistics regression with lbfgs solver. LBFGS solver works with L2 regularization. where best hyperparameter is selected by cross-validator StratifiedKFold mechanism.
@@ -627,11 +633,16 @@ Confusion matrix for Logistic Regression is given below.
 \includegraphics[width=\columnwidth]{LOGISTIC}
 
 
+\subsection{SGD classifier}
+\label{sub:SGD classifier}
+This estimator implements regularized linear models with stochastic gradient descent(SGD) learning. As with other classifiers, we first normalized the data with zero mean and unit variance and trained this model with "hinge" loss and L2 regularization. Optimal values were found by cross examining with minimizing error on K Fold random set.
+\includegraphics[width=\columnwidth]{SGDCLASSIFIER}
+
 \subsection{AdaBoost}
 \label{sub:AdaBoost Classification}
 We used Adaboost algorithm to fit a sequence of weak learners on repeatedly modified versions of data. We experimented it with number of esimtaros and $learning_rate$ parameter. $n_estimator$ controls the number of iterations on models and $learning_rate$ controls the contribution of weak learners in final combination.
 
-Here we experimented it with SVM as base estimator for adaboost and observed good classification results.
+Here we experimented it with SGDClassifier as base estimator for adaboost and observed better results that original estimator.
 Confusion matrix for AdaBoost is given below.
 \includegraphics[width=\columnwidth]{ADABOOST}
 
@@ -639,7 +650,7 @@ Confusion matrix for AdaBoost is given below.
 \label{sub:Baagging Classification}
 We have also experimented on Bagging classifiers which fits base classifier each on random subsets of the original dataset and then aggregate the individual predictions(either by voting or by averaging) to form a final prediction. Such a meta-estimator is very useful in reducing the variance of base estimator by introducing randomization into its construction procedure and then making ensemble out of it.
 
-Here we experimented it with SVM as base estimator as bagging classifier with varying number of model estimators.
+Here we experimented it with SGDClassifier as base estimator in bagging classifier with varying number of model estimators.
 Confusion matrix for Bagging classifier is given below.
 \includegraphics[width=\columnwidth]{BAGGING}
 
@@ -650,11 +661,11 @@ Hyperparameters of our classifiers are learnt based on the performance on valida
 
 \includegraphics[width=\columnwidth]{validation}
 \section{Overfitting Analysis}
-To validate our SVM model does not suffer from bias/variance error, we applied learning curve analysis, which shows the training score is much greater than the validation score. Adding more training samples will most likely increase generalization. This proves that our model does not suffer form any bias vairance errors. 
+To validate our SVM model that it does not suffer from bias/variance error, we applied learning curve analysis, which shows the training score is much greater than the validation score. Adding more training samples will most likely increase generalization. This proves that our model does not suffer form any bias vairance errors.
 
 \includegraphics[width=\columnwidth]{learning}
 \section{Classification Metrics}
-Classification accuracy varied between the different machine learning techniques and genres. We got best accuracy with SVM classifier closed to 74\% accuracy. Reggae and Rock were difficult ones to classify whereas jazz achieved highest classification score. Here are some confusion matrix results for different classifiers. 
+Classification accuracy varied between the different machine learning techniques and genres. We got best accuracy with SVM classifier closed to 74\% accuracy. Reggae and Rock were difficult ones to classify whereas jazz achieved highest classification score. Here are some confusion matrix results for different classifiers.
 \subsection{Precision}
 The precision is the ratio $\frac{tp}{tp + fp}$ where tp is the number of true positives and fp the number of false positives. The precision is intuitively the ability of the classifier not to label as positive a sample that is negative.
 Below is the confusion matrix for precision values for different classifiers against different genres:
@@ -677,7 +688,26 @@ Below is the confusion matrix for F1 values for different classifiers against di
 \includegraphics[width=\columnwidth]{f1score}
 
 \section{Conclusion}
-According to our analysis, music files consist of many important features, especially for genre classification task. We were able to get better accuracy results by using mutiple features together. It is also observed that selection of classification algorithm affects the classification accuracy of different genres. In general, SVM outperformed other algorithms, but then again Neural Network was not used to its full potential. Some genres have better precision values, while other have better recall values and some genres have poor results for both. This means that, Jazz and Classical were overall easier to classify than other genres. In future work, we can apply neaural network and especially deep learning architecture to this problem which can probably model this problem better. Also if we can acquire more domain knowledge about genre classification, we can apply Bayesian Network techniques and construct problem-specific Bayesian model for this problem.
+Here is generalized accuracy report on test dataset for various classifiers.
+\begin{table}[H]
+\centering
+\caption{My caption}
+\label{my-label}
+\begin{tabular}{ll}
+\hline
+\textbf{CLASSIFIER}                  & \textbf{ACCURACY}         \\ \hline
+\multicolumn{1}{|l|}{SVM}            & \multicolumn{1}{l|}{0.74} \\ \hline
+\multicolumn{1}{|l|}{LINEAR SVM}     & \multicolumn{1}{l|}{0.63} \\ \hline
+\multicolumn{1}{|l|}{SGD}            & \multicolumn{1}{l|}{0.66} \\ \hline
+\multicolumn{1}{|l|}{ADABOOST}       & \multicolumn{1}{l|}{0.71} \\ \hline
+\multicolumn{1}{|l|}{BAGGING}        & \multicolumn{1}{l|}{0.68} \\ \hline
+\multicolumn{1}{|l|}{ARTIFICIAL NEURAL NETWORK (ANN) } & \multicolumn{1}{l|}{0.51} \\ \hline
+\multicolumn{1}{|l|}{LOGISTC}        & \multicolumn{1}{l|}{0.70} \\ \hline
+\multicolumn{1}{|l|}{KNN}            & \multicolumn{1}{l|}{0.53} \\ \hline
+\end{tabular}
+\end{table}
+
+According to our analysis, music files consist of many important features, especially for genre classification task. We were able to get better accuracy results by using mutiple features together. It is also observed that selection of classification algorithm affects the classification accuracy of different genres. In general, SVM outperformed other algorithms, but then again Neural Network was not used to its full potential. Some genres have better precision values, while other have better recall values and some genres have poor results for both. This means that, Jazz and Classical were overall easier to classify than other genres. In future work, we can apply neural network and especially deep learning architecture to this problem which can probably model this problem better. Also if we can acquire more domain knowledge about genre classification, we can apply Bayesian Network techniques and construct problem-specific Bayesian model for this problem.
 
 % conference papers do not normally have an appendix
 
