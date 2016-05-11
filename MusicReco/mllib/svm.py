@@ -9,12 +9,12 @@ class SVM(Base):
 	def train(self, data = None, plugin=None):
 		""" With dataframe train mllib """
 		super(SVM, self).train(data, plugin)
-		
-		self.clf = svm.SVC(gamma=0.001, C= 100, kernel='rbf')
-		#self.clf = svm.LinearSVC(C=10, loss='squared_hinge', penalty='l2', tol=0.00001)
+
+		#self.clf = svm.SVC(gamma=0.001, C= 100, kernel='rbf')
+		self.clf = svm.LinearSVC(C=10, loss='squared_hinge', penalty='l2', tol=0.00001)
 		X = self.X_train.iloc[:,:-1]
 		Y = self.X_train.iloc[:,-1]
-		
+
 		self.scaler = StandardScaler().fit(X)
 		X = self.scaler.transform(X)
 
@@ -25,7 +25,7 @@ class SVM(Base):
 		# X = np.append(X, Y, 1)
 		# self.plot(X)
 		# X = X[:,:-1]
-		# # IT ENDS HERE 
+		# # IT ENDS HERE
 
 		self.clf.fit(X, Y)
 
@@ -37,4 +37,3 @@ class SVM(Base):
 		X = self.scaler.transform(X)
 		guess = self.clf.predict(X)
 		return self.getTag(guess)
-

@@ -1,6 +1,8 @@
 from sklearn.linear_model import LogisticRegression
-from sklearn.preprocessing import StandardScaler
 from sklearn.naive_bayes import GaussianNB
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import SGDClassifier
+
 from .base import Base
 
 class Linear(Base):
@@ -9,6 +11,7 @@ class Linear(Base):
 		""" With dataframe train mllib """
 		super(Linear, self).train(data, plugin)
 		self.clf = GaussianNB()
+		#self.clf = SGDClassifier(loss='hinge')
 		X = self.X_train.iloc[:,:-1]
 		Y = self.X_train.iloc[:,-1]
 

@@ -139,19 +139,19 @@ def main():
     # Create feature vector of songs
     manager.use_plugin(plugin='AF')
 
-    manager.use_ml(ml = "ADABOOST")
+    manager.use_ml(ml = "LINEAR")
 
     #manager.init_vectors(limit = 1000)
 
     # learning algorithms
-    #manager.train()
+    manager.train()
 
-    #predict, test =  manager.test()
+    predict, test =  manager.test()
 
-    #manager.accuracy_score(predict, test)
+    manager.accuracy_score(predict, test)
 
     #manager.plot()
-    plots(manager)
+    #plots(manager)
 
 
 
